@@ -59,3 +59,13 @@ function createOffer(count) {
 
   return data;
 }
+
+function getOffers(count) {
+  var offers = [];
+  for (var i = 0; i < count; i++) {
+    offers.push(createOffer(i));
+  }
+  return offers;
+}
+
+var offers = getOffers(8);
