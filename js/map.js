@@ -12,12 +12,12 @@ var TITLES = [
 ];
 var TYPES = ['palace', 'flat', 'house', 'bungalo'];
 var TIMEFRAMES = ['12:00', '13:00', '14:00'];
-var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner']
+var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 var PHOTOS = [
   'http://o0.github.io/assets/images/tokyo/hotel1.jpg',
   'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
-]
+];
 var PIN_WIDTH = 50;
 var MAP_WIDTH = document.querySelector('.map').clientWidth;
 
