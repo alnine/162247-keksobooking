@@ -19,7 +19,8 @@ var PHOTOS = [
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
 ];
 var PIN_WIDTH = 50;
-var MAP_WIDTH = document.querySelector('.map').clientWidth;
+var mapWidth = document.querySelector('.map').clientWidth;
+
 
 function getRandomIntegerFromInterval(min, max) {
   return Math.floor(min + Math.random() * (max + 1 - min));
@@ -32,7 +33,7 @@ function getRandomElementFromArray(arr) {
 function createOffer(count) {
   var data = {
     'author': {
-      'avatar': 'img/avatars/user0' + (count + 1) + '.png'
+      'avatar': 'img/avatars/user' + (count + 1 < 10 ? '0' + (count + 1) : count + 1) + '.png'
     },
 
     'offer': {
@@ -50,7 +51,7 @@ function createOffer(count) {
     },
 
     'location': {
-      'x': getRandomIntegerFromInterval(PIN_WIDTH / 2, MAP_WIDTH - PIN_WIDTH / 2),
+      'x': getRandomIntegerFromInterval(PIN_WIDTH / 2, mapWidth - PIN_WIDTH / 2),
       'y': getRandomIntegerFromInterval(130, 630)
     }
   };
@@ -68,4 +69,31 @@ function getOffers(count) {
   return offers;
 }
 
+function getPinLayout(data) {
+  var pinTemplate = document.querySelector('#pin')
+                      .content
+                      .querySelector('.map__pin');
+  var pinItem = pinTemplate.cloneNode(true);
+  var styleAtrribute = 'left: ' + data.location.x + 'px; '
+                      + 'top: ' + data.location.y + 'px;';
+  pinItem.setAttribute('style', styleAtrribute);
+  pinItem.querySelector('img').src = data.author.avatar;
+  pinItem.querySelector('img').alt = data.offer.title;
+  return pinItem;
+}
+
+function renderPins(list) {
+  var fragment = document.createDocumentFragment();
+  for (var i = 0; i < list.length; i++) {
+    var pin = getPinLayout(list[i]);
+    fragment.appendChild(pin);
+  }
+  return fragment;
+}
+
+var map = document.querySelector('.map');
+var mapPinsBlock = document.querySelector('.map__pins');
+map.classList.remove('map--faded');
 var offers = getOffers(8);
+mapPinsBlock.appendChild(renderPins(offers));
+
