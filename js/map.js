@@ -11,7 +11,12 @@ var TITLES = [
   'Неуютное бунгало по колено в воде'
 ];
 var TYPES = ['palace', 'flat', 'house', 'bungalo'];
-var TYPES_RU = ['Дворец', 'Квартира', 'Дом', 'Бунгало'];
+var typesLabel = {
+  palace: 'Дворец',
+  flat: 'Квартира',
+  house: 'Дом',
+  bungalo: 'Бунгало'
+};
 var TIMEFRAMES = ['12:00', '13:00', '14:00'];
 var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 var PHOTOS = [
@@ -92,25 +97,6 @@ function renderPins(list) {
   return fragment;
 }
 
-function getOfferType(data) {
-  var offerType = data;
-  switch (offerType) {
-    case 'palace':
-      offerType = TYPES_RU[0];
-      break;
-    case 'flat':
-      offerType = TYPES_RU[1];
-      break;
-    case 'house':
-      offerType = TYPES_RU[2];
-      break;
-    case 'bungalo':
-      offerType = TYPES_RU[3];
-      break;
-  }
-  return offerType;
-}
-
 function getOfferCapacity(rooms, guests) {
   return rooms + ' комнаты для ' + guests + ' гостей';
 }
@@ -151,7 +137,7 @@ function getOfferLayout(data) {
   offerCardItem.querySelector('.popup__title').textContent = data.offer.title;
   offerCardItem.querySelector('.popup__text--address').textContent = data.offer.address;
   offerCardItem.querySelector('.popup__text--price').textContent = data.offer.price + '₽/ночь';
-  offerCardItem.querySelector('.popup__type').textContent = getOfferType(data.offer.type);
+  offerCardItem.querySelector('.popup__type').textContent = typesLabel[data.offer.type];
   offerCardItem.querySelector('.popup__text--capacity').textContent = getOfferCapacity(data.offer.rooms, data.offer.guests);
   offerCardItem.querySelector('.popup__text--time').textContent = getOfferTimeFrame(data.offer.checkin, data.offer.checkout);
   featuresList.innerHTML = '';
