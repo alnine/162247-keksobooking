@@ -98,14 +98,6 @@ function renderPins(list) {
   return fragment;
 }
 
-function getOfferCapacity(rooms, guests) {
-  return rooms + ' комнаты для ' + guests + ' гостей';
-}
-
-function getOfferTimeFrame(checkin, checkout) {
-  return 'Заезд после ' + checkin + ', выезд до ' + checkout;
-}
-
 function getOfferFeatures(data) {
   var fragment = document.createDocumentFragment();
   for (var i = 0; i < data.length; i++) {
@@ -139,8 +131,8 @@ function getOfferLayout(data) {
   offerCardItem.querySelector('.popup__text--address').textContent = data.offer.address;
   offerCardItem.querySelector('.popup__text--price').textContent = data.offer.price + '₽/ночь';
   offerCardItem.querySelector('.popup__type').textContent = typesLabel[data.offer.type];
-  offerCardItem.querySelector('.popup__text--capacity').textContent = getOfferCapacity(data.offer.rooms, data.offer.guests);
-  offerCardItem.querySelector('.popup__text--time').textContent = getOfferTimeFrame(data.offer.checkin, data.offer.checkout);
+  offerCardItem.querySelector('.popup__text--capacity').textContent = data.offer.rooms + ' комнаты для ' + data.offer.guests + ' гостей';
+  offerCardItem.querySelector('.popup__text--time').textContent = 'Заезд после ' + data.offer.checkin + ', выезд до ' + data.offer.checkout;
   featuresList.innerHTML = '';
   featuresList.appendChild(getOfferFeatures(data.offer.features));
   offerCardItem.querySelector('.popup__description').textContent = data.offer.description;
