@@ -37,6 +37,9 @@ function getRandomElementFromArray(arr) {
 }
 
 function createOffer(count) {
+  var locationX = getRandomIntegerFromInterval(PIN_WIDTH / 2, mapWidth - PIN_WIDTH / 2);
+  var locationY = getRandomIntegerFromInterval(130, 630);
+
   var data = {
     'author': {
       'avatar': 'img/avatars/user' + (count + 1 < 10 ? '0' + (count + 1) : count + 1) + '.png'
@@ -44,7 +47,7 @@ function createOffer(count) {
 
     'offer': {
       'title': TITLES[count],
-      'address': '',
+      'address': locationX + ', ' + locationY,
       'price': getRandomIntegerFromInterval(1000, 1000000),
       'type': getRandomElementFromArray(TYPES),
       'rooms': getRandomIntegerFromInterval(1, 5),
@@ -57,12 +60,10 @@ function createOffer(count) {
     },
 
     'location': {
-      'x': getRandomIntegerFromInterval(PIN_WIDTH / 2, mapWidth - PIN_WIDTH / 2),
-      'y': getRandomIntegerFromInterval(130, 630)
+      'x': locationX,
+      'y': locationY
     }
   };
-
-  data.offer.address = data.location.x + ', ' + data.location.y;
 
   return data;
 }
