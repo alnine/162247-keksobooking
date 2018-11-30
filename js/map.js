@@ -145,15 +145,25 @@ function getOfferLayout(data) {
 
 var map = document.querySelector('.map');
 var mapPinsBlock = document.querySelector('.map__pins');
+var pinMain = mapPinsBlock.querySelector('.map__pin--main');
 var mapFilters = document.querySelector('.map__filters-container');
-var noticeForm = document.querySelector('.notice');
-var noticeFormFieldsets = noticeForm.querySelectorAll('fieldset');
+var adForm = document.querySelector('.ad-form');
+var adFormFieldsets = adForm.querySelectorAll('fieldset');
 
-for (var i = 0; i < noticeFormFieldsets.length; i++) {
-  noticeFormFieldsets[i].disabled = 'true';
+for (var i = 0; i < adFormFieldsets.length; i++) {
+  adFormFieldsets[i].disabled = 'true';
 }
 
-// map.classList.remove('map--faded');
+function activatedMainPage() {
+  map.classList.remove('map--faded');
+  adForm.classList.remove('ad-form--disabled');
+  for (var k = 0; k < adFormFieldsets.length; k++) {
+    adFormFieldsets[k].disabled = 'false';
+  }
+  pinMain.removeEventListener('mouseup', activatedMainPage);
+}
+
+pinMain.addEventListener('mouseup', activatedMainPage);
 
 // var offers = getOffers(8);
 // mapPinsBlock.appendChild(renderPins(offers));
