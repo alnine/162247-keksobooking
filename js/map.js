@@ -146,8 +146,15 @@ function getOfferLayout(data) {
 var map = document.querySelector('.map');
 var mapPinsBlock = document.querySelector('.map__pins');
 var mapFilters = document.querySelector('.map__filters-container');
-var offers = getOffers(8);
-map.classList.remove('map--faded');
-mapPinsBlock.appendChild(renderPins(offers));
+var noticeForm = document.querySelector('.notice');
+var noticeFormFieldsets = noticeForm.querySelectorAll('fieldset');
 
-map.insertBefore(getOfferLayout(offers[0]), mapFilters);
+for (var i = 0; i < noticeFormFieldsets.length; i++) {
+  noticeFormFieldsets[i].disabled = 'true';
+}
+
+// map.classList.remove('map--faded');
+
+// var offers = getOffers(8);
+// mapPinsBlock.appendChild(renderPins(offers));
+// map.insertBefore(getOfferLayout(offers[0]), mapFilters);
