@@ -149,10 +149,7 @@ var pinMain = mapPinsBlock.querySelector('.map__pin--main');
 var mapFilters = document.querySelector('.map__filters-container');
 var adForm = document.querySelector('.ad-form');
 var adFormFieldsets = adForm.querySelectorAll('fieldset');
-
-for (var i = 0; i < adFormFieldsets.length; i++) {
-  adFormFieldsets[i].disabled = 'true';
-}
+var adFormAddressField = adForm.querySelector('#address');
 
 function activatedMainPage() {
   map.classList.remove('map--faded');
@@ -160,10 +157,33 @@ function activatedMainPage() {
   for (var k = 0; k < adFormFieldsets.length; k++) {
     adFormFieldsets[k].disabled = 'false';
   }
-  pinMain.removeEventListener('mouseup', activatedMainPage);
 }
 
-pinMain.addEventListener('mouseup', activatedMainPage);
+function getObjectOfPinCoordinates(pinEl, isTailCoord) {
+  var pinX = Math.floor(pinEl.offsetLeft + pinEl.clientWidth / 2);
+  var pinY = Math.floor(pinEl.offsetTop + pinEl.clientHeight / 2);
+  if (isTailCoord) {
+    pinY = Math.floor(pinEl.offsetTop + pinEl.clientHeight);
+  }
+  return {x: pinX, y: pinY};
+}
+
+function fillValueAddressField(el, hasTail) {
+  var pinCoord = getObjectOfPinCoordinates(el, hasTail);
+  adFormAddressField.value = pinCoord.x + ', ' + pinCoord.y;
+}
+
+function pinMainMouseUpHandler(evt) {
+  activatedMainPage();
+  fillValueAddressField(evt.currentTarget, true);
+  pinMain.removeEventListener('mouseup', pinMainMouseUpHandler);
+}
+
+for (var i = 0; i < adFormFieldsets.length; i++) {
+  adFormFieldsets[i].disabled = 'true';
+}
+fillValueAddressField(pinMain, false);
+pinMain.addEventListener('mouseup', pinMainMouseUpHandler);
 
 // var offers = getOffers(8);
 // mapPinsBlock.appendChild(renderPins(offers));
