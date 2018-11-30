@@ -154,8 +154,8 @@ var adFormAddressField = adForm.querySelector('#address');
 function activatedMainPage() {
   map.classList.remove('map--faded');
   adForm.classList.remove('ad-form--disabled');
-  for (var k = 0; k < adFormFieldsets.length; k++) {
-    adFormFieldsets[k].disabled = 'false';
+  for (var i = 0; i < adFormFieldsets.length; i++) {
+    adFormFieldsets[i].disabled = false;
   }
 }
 
@@ -175,16 +175,17 @@ function fillValueAddressField(el, hasTail) {
 
 function pinMainMouseUpHandler(evt) {
   activatedMainPage();
+  mapPinsBlock.appendChild(renderPins(offers));
   fillValueAddressField(evt.currentTarget, true);
   pinMain.removeEventListener('mouseup', pinMainMouseUpHandler);
 }
 
 for (var i = 0; i < adFormFieldsets.length; i++) {
-  adFormFieldsets[i].disabled = 'true';
+  adFormFieldsets[i].disabled = true;
 }
+
 fillValueAddressField(pinMain, false);
+var offers = getOffers(8);
 pinMain.addEventListener('mouseup', pinMainMouseUpHandler);
 
-// var offers = getOffers(8);
-// mapPinsBlock.appendChild(renderPins(offers));
 // map.insertBefore(getOfferLayout(offers[0]), mapFilters);
