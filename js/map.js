@@ -114,7 +114,7 @@ function getOfferCardLayout(data) {
   var cardClose = offerCardItem.querySelector('.popup__close');
 
   cardClose.addEventListener('click', function () {
-    offerCardRemove();
+    closeOfferCard();
   });
   offerCardItem.querySelector('.popup__title').textContent = data.offer.title;
   offerCardItem.querySelector('.popup__text--address').textContent = data.offer.address;
@@ -132,16 +132,24 @@ function getOfferCardLayout(data) {
   return offerCardItem;
 }
 
-function offerCardRemove() {
+function closeOfferCard() {
   var offerCard = map.querySelector('.map__card.popup');
   if (offerCard) {
     map.removeChild(offerCard);
+    document.removeEventListener('keydown', offerCardEscHandler);
+  }
+}
+
+function offerCardEscHandler(evt) {
+  if (evt.keyCode === 27) {
+    closeOfferCard();
   }
 }
 
 function openOfferCard(data) {
-  offerCardRemove();
+  closeOfferCard();
   map.insertBefore(getOfferCardLayout(data), mapFilters);
+  document.addEventListener('keydown', offerCardEscHandler);
 }
 
 function getPinItemLayout(data) {
