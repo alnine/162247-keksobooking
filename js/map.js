@@ -25,6 +25,7 @@ var PHOTOS = [
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
 ];
 var PIN_WIDTH = 50;
+var ESC_KEYCODE = 27;
 var mapWidth = document.querySelector('.map').clientWidth;
 var map = document.querySelector('.map');
 var mapPinsBlock = document.querySelector('.map__pins');
@@ -141,7 +142,7 @@ function closeOfferCard() {
 }
 
 function offerCardEscHandler(evt) {
-  if (evt.keyCode === 27) {
+  if (evt.keyCode === ESC_KEYCODE) {
     closeOfferCard();
   }
 }
@@ -157,9 +158,8 @@ function getPinItemLayout(data) {
                       .content
                       .querySelector('.map__pin');
   var pinItem = pinTemplate.cloneNode(true);
-  var styleAtrribute = 'left: ' + data.location.x + 'px; '
-                      + 'top: ' + data.location.y + 'px;';
-  pinItem.setAttribute('style', styleAtrribute);
+  pinItem.style.cssText = 'left: ' + data.location.x + 'px; '
+                         + 'top: ' + data.location.y + 'px;';
   pinItem.querySelector('img').src = data.author.avatar;
   pinItem.querySelector('img').alt = data.offer.title;
   pinItem.addEventListener('click', function () {
@@ -176,8 +176,6 @@ function renderPins(list) {
   }
   return fragment;
 }
-
-
 
 function activatedMainPage() {
   map.classList.remove('map--faded');
@@ -217,5 +215,3 @@ for (var i = 0; i < adFormFieldsets.length; i++) {
 
 fillValueAddressField(pinMain, false);
 pinMain.addEventListener('mouseup', pinMainMouseUpHandler);
-
-// map.insertBefore(getOfferCardLayout(offers[0]), mapFilters);
