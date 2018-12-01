@@ -10,12 +10,12 @@ var TITLES = [
   'Уютное бунгало далеко от моря',
   'Неуютное бунгало по колено в воде'
 ];
-var TYPES = ['palace', 'flat', 'house', 'bungalo'];
-var typesLabel = {
-  palace: 'Дворец',
-  flat: 'Квартира',
-  house: 'Дом',
-  bungalo: 'Бунгало'
+var TYPES = ['PALACE', 'FLAT', 'HOUSE', 'BUNGALO'];
+var TypesLabel = {
+  PALACE: 'Дворец',
+  FLAT: 'Квартира',
+  HOUSE: 'Дом',
+  BUNGALO: 'Бунгало'
 };
 var TIMEFRAMES = ['12:00', '13:00', '14:00'];
 var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
@@ -119,7 +119,7 @@ function getOfferCardLayout(data) {
   offerCardItem.querySelector('.popup__title').textContent = data.offer.title;
   offerCardItem.querySelector('.popup__text--address').textContent = data.offer.address;
   offerCardItem.querySelector('.popup__text--price').textContent = data.offer.price + '₽/ночь';
-  offerCardItem.querySelector('.popup__type').textContent = typesLabel[data.offer.type];
+  offerCardItem.querySelector('.popup__type').textContent = TypesLabel[data.offer.type];
   offerCardItem.querySelector('.popup__text--capacity').textContent = data.offer.rooms + ' комнаты для ' + data.offer.guests + ' гостей';
   offerCardItem.querySelector('.popup__text--time').textContent = 'Заезд после ' + data.offer.checkin + ', выезд до ' + data.offer.checkout;
   featuresList.innerHTML = '';
