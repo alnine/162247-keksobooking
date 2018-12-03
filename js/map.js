@@ -35,7 +35,6 @@ var adForm = document.querySelector('.ad-form');
 var adFormFieldsets = adForm.querySelectorAll('fieldset');
 var adFormAddressField = adForm.querySelector('#address');
 
-
 function getRandomIntegerFromInterval(min, max) {
   return Math.floor(min + Math.random() * (max + 1 - min));
 }
