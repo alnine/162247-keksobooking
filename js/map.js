@@ -50,6 +50,8 @@ var adFormRoomSelect = adForm.querySelector('#room_number');
 var adFormCapasitySelect = adForm.querySelector('#capacity');
 var adFormPriceField = adForm.querySelector('#price');
 var adFormTypeSelect = adForm.querySelector('#type');
+var adFormTimeInSelect = adForm.querySelector('#timein');
+var adFormTimeOutSelect = adForm.querySelector('#timeout');
 
 function getRandomIntegerFromInterval(min, max) {
   return Math.floor(min + Math.random() * (max + 1 - min));
@@ -233,8 +235,6 @@ function pinMainMouseUpHandler(evt) {
   activatedMainPage();
   mapPinsBlock.appendChild(pins);
   fillValueAddressField(evt.currentTarget, true);
-  adFormRoomSelect.addEventListener('change', roomSelectChangeHandler);
-  adFormCapasitySelect.addEventListener('change', roomSelectChangeHandler);
   pinMain.removeEventListener('mouseup', pinMainMouseUpHandler);
 }
 
@@ -245,8 +245,21 @@ for (var i = 0; i < adFormFieldsets.length; i++) {
 fillValueAddressField(pinMain, false);
 pinMain.addEventListener('mouseup', pinMainMouseUpHandler);
 
+adFormRoomSelect.addEventListener('change', roomSelectChangeHandler);
+adFormCapasitySelect.addEventListener('change', roomSelectChangeHandler);
+
 adFormTypeSelect.addEventListener('change', function () {
   var key = adFormTypeSelect.value.toUpperCase();
   adFormPriceField.min = MinPriceHousing[key];
   adFormPriceField.placeholder = MinPriceHousing[key];
+});
+
+adFormTimeInSelect.addEventListener('change', function () {
+  var timeSelect = adFormTimeInSelect.selectedIndex;
+  adFormTimeOutSelect.selectedIndex = timeSelect;
+});
+
+adFormTimeOutSelect.addEventListener('change', function () {
+  var timeSelect = adFormTimeOutSelect.selectedIndex;
+  adFormTimeInSelect.selectedIndex = timeSelect;
 });
