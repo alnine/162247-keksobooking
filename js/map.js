@@ -23,6 +23,12 @@ var GuestPerRoom = {
   ROOM_3: ['1', '2', '3'],
   ROOM_100: ['0']
 };
+var MinPriceHousing = {
+  BUNGALO: 0,
+  FLAT: 1000,
+  HOUSE: 5000,
+  PALACE: 10000
+};
 var TIMEFRAMES = ['12:00', '13:00', '14:00'];
 var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 var PHOTOS = [
@@ -42,6 +48,8 @@ var adFormFieldsets = adForm.querySelectorAll('fieldset');
 var adFormAddressField = adForm.querySelector('#address');
 var adFormRoomSelect = adForm.querySelector('#room_number');
 var adFormCapasitySelect = adForm.querySelector('#capacity');
+var adFormPriceField = adForm.querySelector('#price');
+var adFormTypeSelect = adForm.querySelector('#type');
 
 function getRandomIntegerFromInterval(min, max) {
   return Math.floor(min + Math.random() * (max + 1 - min));
@@ -236,3 +244,9 @@ for (var i = 0; i < adFormFieldsets.length; i++) {
 
 fillValueAddressField(pinMain, false);
 pinMain.addEventListener('mouseup', pinMainMouseUpHandler);
+
+adFormTypeSelect.addEventListener('change', function () {
+  var key = adFormTypeSelect.value.toUpperCase();
+  adFormPriceField.min = MinPriceHousing[key];
+  adFormPriceField.placeholder = MinPriceHousing[key];
+});
