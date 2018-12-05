@@ -255,11 +255,11 @@ adFormTypeSelect.addEventListener('change', function () {
 });
 
 adFormTimeInSelect.addEventListener('change', function () {
-  var timeSelect = adFormTimeInSelect.selectedIndex;
-  adFormTimeOutSelect.selectedIndex = timeSelect;
+  var timeSelect = adFormTimeInSelect.value;
+  adFormTimeOutSelect.value = timeSelect;
 });
 
 adFormTimeOutSelect.addEventListener('change', function () {
-  var timeSelect = adFormTimeOutSelect.selectedIndex;
-  adFormTimeInSelect.selectedIndex = timeSelect;
+  var timeSelect = adFormTimeOutSelect.value;
+  adFormTimeInSelect.value = timeSelect;
 });
