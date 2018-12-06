@@ -17,6 +17,18 @@ var TypesLabel = {
   HOUSE: 'Дом',
   BUNGALO: 'Бунгало'
 };
+var GuestPerRoom = {
+  ROOM_1: ['1'],
+  ROOM_2: ['1', '2'],
+  ROOM_3: ['1', '2', '3'],
+  ROOM_100: ['0']
+};
+var MinPriceHousing = {
+  BUNGALO: 0,
+  FLAT: 1000,
+  HOUSE: 5000,
+  PALACE: 10000
+};
 var TIMEFRAMES = ['12:00', '13:00', '14:00'];
 var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 var PHOTOS = [
@@ -34,7 +46,12 @@ var mapFilters = document.querySelector('.map__filters-container');
 var adForm = document.querySelector('.ad-form');
 var adFormFieldsets = adForm.querySelectorAll('fieldset');
 var adFormAddressField = adForm.querySelector('#address');
-
+var adFormRoomSelect = adForm.querySelector('#room_number');
+var adFormCapasitySelect = adForm.querySelector('#capacity');
+var adFormPriceField = adForm.querySelector('#price');
+var adFormTypeSelect = adForm.querySelector('#type');
+var adFormTimeInSelect = adForm.querySelector('#timein');
+var adFormTimeOutSelect = adForm.querySelector('#timeout');
 
 function getRandomIntegerFromInterval(min, max) {
   return Math.floor(min + Math.random() * (max + 1 - min));
@@ -202,6 +219,18 @@ function fillValueAddressField(el, hasTail) {
 var offers = getOffers(8);
 var pins = renderPins(offers);
 
+function roomSelectChangeHandler() {
+  var key = 'ROOM_' + adFormRoomSelect.value;
+  var value = adFormCapasitySelect.value;
+  if (key === 'ROOM_100' && value !== '0') {
+    adFormCapasitySelect.setCustomValidity('Помещение не для гостей');
+  } else if (GuestPerRoom[key].indexOf(value) < 0) {
+    adFormCapasitySelect.setCustomValidity('Все не поместятся');
+  } else {
+    adFormCapasitySelect.setCustomValidity('');
+  }
+}
+
 function pinMainMouseUpHandler(evt) {
   activatedMainPage();
   mapPinsBlock.appendChild(pins);
@@ -215,3 +244,22 @@ for (var i = 0; i < adFormFieldsets.length; i++) {
 
 fillValueAddressField(pinMain, false);
 pinMain.addEventListener('mouseup', pinMainMouseUpHandler);
+
+adFormRoomSelect.addEventListener('change', roomSelectChangeHandler);
+adFormCapasitySelect.addEventListener('change', roomSelectChangeHandler);
+
+adFormTypeSelect.addEventListener('change', function () {
+  var key = adFormTypeSelect.value.toUpperCase();
+  adFormPriceField.min = MinPriceHousing[key];
+  adFormPriceField.placeholder = MinPriceHousing[key];
+});
+
+adFormTimeInSelect.addEventListener('change', function () {
+  var timeSelect = adFormTimeInSelect.value;
+  adFormTimeOutSelect.value = timeSelect;
+});
+
+adFormTimeOutSelect.addEventListener('change', function () {
+  var timeSelect = adFormTimeOutSelect.value;
+  adFormTimeInSelect.value = timeSelect;
+});
