@@ -36,6 +36,8 @@ var PHOTOS = [
   'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
 ];
+var LIMIT_Y_MIN = 130;
+var LIMIT_Y_MAX = 630;
 var PIN_WIDTH = 50;
 var ESC_KEYCODE = 27;
 var mapWidth = document.querySelector('.map').clientWidth;
@@ -63,7 +65,7 @@ function getRandomElementFromArray(arr) {
 
 function createOffer(count) {
   var locationX = getRandomIntegerFromInterval(PIN_WIDTH / 2, mapWidth - PIN_WIDTH / 2);
-  var locationY = getRandomIntegerFromInterval(130, 630);
+  var locationY = getRandomIntegerFromInterval(LIMIT_Y_MIN, LIMIT_Y_MAX);
 
   var data = {
     'author': {
@@ -242,8 +244,59 @@ for (var i = 0; i < adFormFieldsets.length; i++) {
   adFormFieldsets[i].disabled = true;
 }
 
-fillValueAddressField(pinMain, false);
-pinMain.addEventListener('mouseup', pinMainMouseUpHandler);
+pinMain.addEventListener('mousedown', function (downEvt) {
+  downEvt.preventDefault();
+
+  var startCoords = {
+    x: downEvt.pageX,
+    y: downEvt.pageY
+  };
+
+  function onPinMouseMove(moveEvt) {
+    moveEvt.preventDefault();
+    activatedMainPage();
+    mapPinsBlock.appendChild(pins);
+
+    var shift = {
+      x: startCoords.x - moveEvt.pageX,
+      y: startCoords.y - moveEvt.pageY
+    };
+
+    var newPinCoords = {
+      left: pinMain.offsetLeft - shift.x,
+      top: pinMain.offsetTop - shift.y
+    };
+
+    if (newPinCoords.top > LIMIT_Y_MAX || newPinCoords.top < LIMIT_Y_MIN) {
+      if (newPinCoords.top > LIMIT_Y_MAX) {
+        newPinCoords.top = LIMIT_Y_MAX;
+      } else {
+        newPinCoords.top = LIMIT_Y_MIN;
+      }
+    }
+
+    pinMain.style.left = newPinCoords.left + 'px';
+    pinMain.style.top = newPinCoords.top + 'px';
+
+    startCoords = {
+      x: moveEvt.pageX,
+      y: moveEvt.pageY
+    };
+  }
+
+  function onPinMouseUp(upEvt) {
+    upEvt.preventDefault();
+
+    document.removeEventListener('mousemove', onPinMouseMove);
+    document.removeEventListener('mouseup', onPinMouseUp);
+  }
+
+  document.addEventListener('mousemove', onPinMouseMove);
+  document.addEventListener('mouseup', onPinMouseUp);
+});
+
+// fillValueAddressField(pinMain, false);
+// pinMain.addEventListener('mouseup', pinMainMouseUpHandler);
 
 adFormRoomSelect.addEventListener('change', roomSelectChangeHandler);
 adFormCapasitySelect.addEventListener('change', roomSelectChangeHandler);
