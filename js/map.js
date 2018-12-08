@@ -23,6 +23,14 @@ var GuestPerRoom = {
   ROOM_3: ['1', '2', '3'],
   ROOM_100: ['0']
 };
+
+var GuestErrorMessage = {
+  ROOM_1: 'Мало места',
+  ROOM_2: 'Мало места',
+  ROOM_3: 'Мало места',
+  ROOM_100: 'Не для гостей'
+};
+
 var MinPriceHousing = {
   BUNGALO: 0,
   FLAT: 1000,
@@ -211,14 +219,13 @@ function activatePage(pins) {
 }
 
 function roomSelectChangeHandler() {
-  var key = 'ROOM_' + adFormRoomSelect.value;
-  var value = adFormCapasitySelect.value;
-  if (key === 'ROOM_100' && value !== '0') {
-    adFormCapasitySelect.setCustomValidity('Помещение не для гостей');
-  } else if (GuestPerRoom[key].indexOf(value) < 0) {
-    adFormCapasitySelect.setCustomValidity('Все не поместятся');
-  } else {
+  var guests = GuestPerRoom['ROOM_' + adFormRoomSelect.value];
+  var errorMessage = GuestErrorMessage['ROOM_' + adFormRoomSelect.value];
+  var isMatch = guests.includes(adFormCapasitySelect.value);
+  if (isMatch) {
     adFormCapasitySelect.setCustomValidity('');
+  } else {
+    adFormCapasitySelect.setCustomValidity(errorMessage);
   }
 }
 
@@ -264,7 +271,7 @@ pinMain.addEventListener('mousedown', function (downEvt) {
 
     var borders = {
       top: LIMIT_Y_MIN - pinMain.clientHeight - TAIL_HEIGHT,
-      bottom: LIMIT_Y_MAX,
+      bottom: LIMIT_Y_MAX - pinMain.clientHeight - TAIL_HEIGHT,
       left: 0 - pinMain.clientWidth / 2,
       right: map.clientWidth - pinMain.clientWidth / 2
     };
