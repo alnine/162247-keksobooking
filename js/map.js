@@ -2,11 +2,9 @@
 
 (function () {
 
-  var OFFERS_COUNT = 8;
   var TAIL_HEIGHT = 9;
   var MAP_LIMIT_Y_MIN = 130;
   var MAP_LIMIT_Y_MAX = 630;
-  var data = window.data(OFFERS_COUNT);
   var isPageActive = false;
   var map = document.querySelector('.map');
   var mapPinsBlock = document.querySelector('.map__pins');
@@ -21,13 +19,17 @@
       var pin = window.pin(list[i]);
       fragment.appendChild(pin);
     }
-    return fragment;
+    mapPinsBlock.appendChild(fragment);
   }
 
-  function activatePage(pins) {
+  function errorHandler(message) {
+    console.log(message);
+  }
+
+  function activatePage() {
     if (!isPageActive) {
       map.classList.remove('map--faded');
-      mapPinsBlock.appendChild(pins);
+      window.backend.load(renderPins, errorHandler);
       form.classList.remove('ad-form--disabled');
       for (var i = 0; i < formFieldsets.length; i++) {
         formFieldsets[i].disabled = false;
@@ -52,7 +54,6 @@
     formAddressField.value = coords.x + ', ' + coords.y;
   }
 
-  var pins = renderPins(data);
   var pinMainStartCoords = getPinCenterCoords(pinMain);
   fillValueAddressField(pinMainStartCoords);
 
@@ -72,7 +73,7 @@
 
     function onPinMouseMove(moveEvt) {
       moveEvt.preventDefault();
-      activatePage(pins);
+      activatePage();
 
       var borders = {
         top: MAP_LIMIT_Y_MIN - pinMain.clientHeight - TAIL_HEIGHT,
@@ -110,7 +111,7 @@
 
     function onPinMouseUp(upEvt) {
       upEvt.preventDefault();
-      activatePage(pins);
+      activatePage();
       addressCoords = getPinTailCoords(pinMain);
       fillValueAddressField(addressCoords);
       document.removeEventListener('mousemove', onPinMouseMove);
