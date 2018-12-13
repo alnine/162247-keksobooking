@@ -16,8 +16,10 @@
   function renderPins(list) {
     var fragment = document.createDocumentFragment();
     for (var i = 0; i < list.length; i++) {
-      var pin = window.pin(list[i]);
-      fragment.appendChild(pin);
+      if (list[i].offer) {
+        var pin = window.pin(list[i]);
+        fragment.appendChild(pin);
+      }
     }
     mapPinsBlock.appendChild(fragment);
   }
