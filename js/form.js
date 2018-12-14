@@ -43,6 +43,12 @@
     }
   }
 
+  function setMinPrice() {
+    var key = adFormTypeSelect.value.toUpperCase();
+    adFormPriceField.min = MinPriceHousing[key];
+    adFormPriceField.placeholder = MinPriceHousing[key];
+  }
+
   adForm.addEventListener('submit', function (evt) {
     evt.preventDefault();
     window.backend.upload(new FormData(adForm), window.popup.successHandler, window.popup.errorHandler);
@@ -51,11 +57,7 @@
   adFormRoomSelect.addEventListener('change', roomSelectChangeHandler);
   adFormCapasitySelect.addEventListener('change', roomSelectChangeHandler);
 
-  adFormTypeSelect.addEventListener('change', function () {
-    var key = adFormTypeSelect.value.toUpperCase();
-    adFormPriceField.min = MinPriceHousing[key];
-    adFormPriceField.placeholder = MinPriceHousing[key];
-  });
+  adFormTypeSelect.addEventListener('change', setMinPrice);
 
   adFormTimeInSelect.addEventListener('change', function () {
     var timeSelect = adFormTimeInSelect.value;
