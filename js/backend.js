@@ -26,7 +26,7 @@
       onError('Сервер долго не отвечает. Повторите попытку');
     });
 
-    xhr.timeout = 10000;
+    xhr.timeout = 5000;
 
     xhr.open('GET', URL_LOAD);
     xhr.send();

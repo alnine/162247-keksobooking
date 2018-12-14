@@ -24,14 +24,10 @@
     mapPinsBlock.appendChild(fragment);
   }
 
-  function errorHandler(message) {
-    console.log(message);
-  }
-
   function activatePage() {
     if (!isPageActive) {
       map.classList.remove('map--faded');
-      window.backend.load(renderPins, errorHandler);
+      window.backend.load(renderPins, window.popup.errorHandler);
       form.classList.remove('ad-form--disabled');
       for (var i = 0; i < formFieldsets.length; i++) {
         formFieldsets[i].disabled = false;

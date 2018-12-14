@@ -31,14 +31,6 @@
   var adFormTypeSelect = adForm.querySelector('#type');
   var adFormTimeInSelect = adForm.querySelector('#timein');
   var adFormTimeOutSelect = adForm.querySelector('#timeout');
-  var mainBlock = document.querySelector('main');
-
-  var successTemplate = document.querySelector('#success')
-                        .content
-                        .querySelector('.success');
-  var errorTemplate = document.querySelector('#error')
-                        .content
-                        .querySelector('.error');
 
   function roomSelectChangeHandler() {
     var guests = GuestPerRoom['ROOM_' + adFormRoomSelect.value];
@@ -51,39 +43,9 @@
     }
   }
 
-  function popUpEscHandler(evt) {
-    window.util.isEscEvent(evt, closePopUp);
-  }
-
-  function closePopUp() {
-    var popup = mainBlock.querySelector('.success') || mainBlock.querySelector('.error');
-    if (popup) {
-      mainBlock.removeChild(popup);
-      document.removeEventListener('keydown', popUpEscHandler);
-    }
-  }
-
-  function successHandler() {
-    var popup = successTemplate.cloneNode(true);
-    mainBlock.appendChild(popup);
-    document.addEventListener('keydown', popUpEscHandler);
-    popup.addEventListener('click', closePopUp);
-  }
-
-  function errorHandler(error) {
-    var popup = errorTemplate.cloneNode(true);
-    var popupCloseButton = popup.querySelector('error__button');
-    var popupMessage = popup.querySelector('.error__message');
-    popupMessage.textContent = popupMessage.textContent + '\n\n' + error;
-    mainBlock.appendChild(popup);
-    document.addEventListener('keydown', popUpEscHandler);
-    popup.addEventListener('click', closePopUp);
-    popupCloseButton.addEventListener('click', closePopUp);
-  }
-
   adForm.addEventListener('submit', function (evt) {
     evt.preventDefault();
-    window.backend.upload(new FormData(adForm), successHandler, errorHandler);
+    window.backend.upload(new FormData(adForm), window.popup.successHandler, window.popup.errorHandler);
   });
 
   adFormRoomSelect.addEventListener('change', roomSelectChangeHandler);
