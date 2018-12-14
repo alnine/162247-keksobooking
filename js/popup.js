@@ -1,3 +1,4 @@
+
 'use strict';
 
 (function () {
@@ -27,6 +28,7 @@
     mainBlock.appendChild(popup);
     document.addEventListener('keydown', popUpEscHandler);
     popup.addEventListener('click', closePopUp);
+    document.querySelector('form.ad-form').reset();
   }
 
   function errorHandler(error) {

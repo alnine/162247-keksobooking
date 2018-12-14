@@ -54,6 +54,13 @@
     window.backend.upload(new FormData(adForm), window.popup.successHandler, window.popup.errorHandler);
   });
 
+  adForm.addEventListener('reset', function () {
+    setTimeout(function () {
+      window.map.deactivatePage();
+      setMinPrice();
+    }, 0);
+  });
+
   adFormRoomSelect.addEventListener('change', roomSelectChangeHandler);
   adFormCapasitySelect.addEventListener('change', roomSelectChangeHandler);
 
