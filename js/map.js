@@ -40,6 +40,7 @@
 
   function deactivatePage() {
     var pinButtons = mapPinsBlock.querySelectorAll('.map__pin[type=button]');
+    window.card.closeOfferCard();
     map.classList.add('map--faded');
     form.classList.add('ad-form--disabled');
     for (var i = 0; i < pinButtons.length; i++) {
