@@ -3,57 +3,44 @@
 (function () {
 
   var SUCCESS_STATE_CODE = 200;
+  var REQUEST_TIMEOUT = 10000;
+  var REPSONSE_TYPE = 'json';
   var URL_LOAD = 'https://js.dump.academy/keksobooking/data';
   var URL_UPLOAD = 'https://js.dump.academy/keksobooking';
 
-  function load(onLoad, onError) {
-    var xhr = new XMLHttpRequest();
-    xhr.responseType = 'json';
+  function createRequest(type, timeout, success, error) {
+    var request = new XMLHttpRequest();
+    request.responseType = type;
 
-    xhr.addEventListener('load', function () {
-      if (xhr.status === SUCCESS_STATE_CODE) {
-        onLoad(xhr.response);
+    request.addEventListener('load', function () {
+      if (request.status === SUCCESS_STATE_CODE) {
+        success(request.response);
       } else {
-        onError('Ошибка: ' + xhr.status + ' ' + xhr.statusText);
+        error('Ошибка: ' + request.status + ' ' + request.statusText);
       }
     });
 
-    xhr.addEventListener('error', function () {
-      onError('Ошибка соединения. Проверьте подключение');
+    request.addEventListener('error', function () {
+      error('Ошибка соединения. Проверьте подключение');
     });
 
-    xhr.addEventListener('timeout', function () {
-      onError('Сервер долго не отвечает. Повторите попытку');
+    request.addEventListener('timeout', function () {
+      error('Сервер долго не отвечает. Повторите попытку');
     });
 
-    xhr.timeout = 5000;
+    request.timeout = timeout;
 
+    return request;
+  }
+
+  function load(onLoad, onError) {
+    var xhr = createRequest(REPSONSE_TYPE, REQUEST_TIMEOUT, onLoad, onError);
     xhr.open('GET', URL_LOAD);
     xhr.send();
   }
 
   function upload(data, onLoad, onError) {
-    var xhr = new XMLHttpRequest();
-    xhr.responseType = 'json';
-
-    xhr.addEventListener('load', function () {
-      if (xhr.status === SUCCESS_STATE_CODE) {
-        onLoad();
-      } else {
-        onError('Ошибка: ' + xhr.status + ' ' + xhr.statusText);
-      }
-    });
-
-    xhr.addEventListener('error', function () {
-      onError('Ошибка соединения. Проверьте подключение');
-    });
-
-    xhr.addEventListener('timeout', function () {
-      onError('Сервер долго не отвечает. Повторите попытку');
-    });
-
-    xhr.timeout = 10000;
-
+    var xhr = createRequest(REPSONSE_TYPE, REQUEST_TIMEOUT, onLoad, onError);
     xhr.open('POST', URL_UPLOAD);
     xhr.send(data);
   }
