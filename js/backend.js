@@ -8,9 +8,9 @@
   var URL_LOAD = 'https://js.dump.academy/keksobooking/data';
   var URL_UPLOAD = 'https://js.dump.academy/keksobooking';
 
-  function createRequest(type, timeout, success, error) {
+  function createRequest(success, error) {
     var request = new XMLHttpRequest();
-    request.responseType = type;
+    request.responseType = REPSONSE_TYPE;
 
     request.addEventListener('load', function () {
       if (request.status === SUCCESS_STATE_CODE) {
@@ -28,19 +28,19 @@
       error('Сервер долго не отвечает. Повторите попытку');
     });
 
-    request.timeout = timeout;
+    request.timeout = REQUEST_TIMEOUT;
 
     return request;
   }
 
   function load(onLoad, onError) {
-    var xhr = createRequest(REPSONSE_TYPE, REQUEST_TIMEOUT, onLoad, onError);
+    var xhr = createRequest(onLoad, onError);
     xhr.open('GET', URL_LOAD);
     xhr.send();
   }
 
   function upload(data, onLoad, onError) {
-    var xhr = createRequest(REPSONSE_TYPE, REQUEST_TIMEOUT, onLoad, onError);
+    var xhr = createRequest(onLoad, onError);
     xhr.open('POST', URL_UPLOAD);
     xhr.send(data);
   }
