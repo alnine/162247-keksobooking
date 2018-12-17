@@ -58,18 +58,67 @@
       closeOfferCard();
     });
 
-    offerCardItem.querySelector('.popup__title').textContent = data.offer.title;
-    offerCardItem.querySelector('.popup__text--address').textContent = data.offer.address;
-    offerCardItem.querySelector('.popup__text--price').textContent = data.offer.price + '₽/ночь';
-    offerCardItem.querySelector('.popup__type').textContent = TypesLabel[data.offer.type];
-    offerCardItem.querySelector('.popup__text--capacity').textContent = data.offer.rooms + ' комнаты для ' + data.offer.guests + ' гостей';
-    offerCardItem.querySelector('.popup__text--time').textContent = 'Заезд после ' + data.offer.checkin + ', выезд до ' + data.offer.checkout;
-    featuresList.innerHTML = '';
-    featuresList.appendChild(getOfferFeatures(data.offer.features));
-    offerCardItem.querySelector('.popup__description').textContent = data.offer.description;
-    photosList.innerHTML = '';
-    photosList.appendChild(getOfferPhotos(data.offer.photos, photoTemplate));
-    offerCardItem.querySelector('.popup__avatar').src = data.author.avatar;
+    if (data.offer.title) {
+      offerCardItem.querySelector('.popup__title').textContent = data.offer.title;
+    } else {
+      offerCardItem.removeChild(offerCardItem.querySelector('.popup__title'));
+    }
+
+    if (data.offer.address) {
+      offerCardItem.querySelector('.popup__text--address').textContent = data.offer.address;
+    } else {
+      offerCardItem.removeChild(offerCardItem.querySelector('.popup__text--address'));
+    }
+
+    if (data.offer.price) {
+      offerCardItem.querySelector('.popup__text--price').textContent = data.offer.price + '₽/ночь';
+    } else {
+      offerCardItem.removeChild(offerCardItem.querySelector('.popup__text--price'));
+    }
+
+    if (data.offer.type) {
+      offerCardItem.querySelector('.popup__type').textContent = TypesLabel[data.offer.type];
+    } else {
+      offerCardItem.removeChild(offerCardItem.querySelector('.popup__type'));
+    }
+
+    if (data.offer.rooms && data.offer.guests) {
+      offerCardItem.querySelector('.popup__text--capacity').textContent = data.offer.rooms + ' комнаты для ' + data.offer.guests + ' гостей';
+    } else {
+      offerCardItem.removeChild(offerCardItem.querySelector('.popup__text--capacity'));
+    }
+
+    if (data.offer.checkin && data.offer.checkout) {
+      offerCardItem.querySelector('.popup__text--time').textContent = 'Заезд после ' + data.offer.checkin + ', выезд до ' + data.offer.checkout;
+    } else {
+      offerCardItem.removeChild(offerCardItem.querySelector('.popup__text--time'));
+    }
+
+    if (data.offer.features) {
+      featuresList.innerHTML = '';
+      featuresList.appendChild(getOfferFeatures(data.offer.features));
+    } else {
+      offerCardItem.removeChild(featuresList);
+    }
+
+    if (data.offer.description) {
+      offerCardItem.querySelector('.popup__description').textContent = data.offer.description;
+    } else {
+      offerCardItem.removeChild(offerCardItem.querySelector('.popup__description'));
+    }
+
+    if (data.offer.photos) {
+      photosList.innerHTML = '';
+      photosList.appendChild(getOfferPhotos(data.offer.photos, photoTemplate));
+    } else {
+      offerCardItem.removeChild(photosList);
+    }
+
+    if (data.author.avatar) {
+      offerCardItem.querySelector('.popup__avatar').src = data.author.avatar;
+    } else {
+      offerCardItem.removeChild(offerCardItem.querySelector('.popup__avatar'));
+    }
 
     return offerCardItem;
   }

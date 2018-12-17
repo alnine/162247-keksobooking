@@ -43,14 +43,28 @@
     }
   }
 
-  adFormRoomSelect.addEventListener('change', roomSelectChangeHandler);
-  adFormCapasitySelect.addEventListener('change', roomSelectChangeHandler);
-
-  adFormTypeSelect.addEventListener('change', function () {
+  function setMinPrice() {
     var key = adFormTypeSelect.value.toUpperCase();
     adFormPriceField.min = MinPriceHousing[key];
     adFormPriceField.placeholder = MinPriceHousing[key];
+  }
+
+  adForm.addEventListener('submit', function (evt) {
+    evt.preventDefault();
+    window.backend.upload(new FormData(adForm), window.popup.successHandler, window.popup.errorHandler);
   });
+
+  adForm.addEventListener('reset', function () {
+    setTimeout(function () {
+      window.map.deactivatePage();
+      setMinPrice();
+    }, 0);
+  });
+
+  adFormRoomSelect.addEventListener('change', roomSelectChangeHandler);
+  adFormCapasitySelect.addEventListener('change', roomSelectChangeHandler);
+
+  adFormTypeSelect.addEventListener('change', setMinPrice);
 
   adFormTimeInSelect.addEventListener('change', function () {
     var timeSelect = adFormTimeInSelect.value;
