@@ -61,51 +61,49 @@
     return data;
   }
 
-  function getRate(advert) {
-    advert.rate = 0;
+  function filtrateOffer(advert) {
     var type = filterData['housing-type'];
+    var price = PriceLevels[filterData['housing-price']];
     var rooms = filterData['housing-rooms'];
     var guests = filterData['housing-guests'];
-    var price = PriceLevels[filterData['housing-price']];
+    var features = filterData.features;
 
-    if (type === 'any' ||
-        type === advert.offer.type) {
-      advert.rate += 1;
+    if (type !== 'any' && type !== advert.offer.type) {
+      return false;
     }
 
-    if (rooms === 'any' ||
-        rooms === advert.offer.rooms.toString()) {
-      advert.rate += 1;
+    if (advert.offer.price < price.min ||
+        advert.offer.price > price.max) {
+      return false;
     }
 
-    if (guests === 'any' ||
-        guests === advert.offer.guests.toString()) {
-      advert.rate += 1;
+    if (rooms !== 'any' &&
+        rooms !== advert.offer.rooms.toString()) {
+      return false;
     }
 
-    filterData.features.forEach(function (item) {
-      if (advert.offer.features.indexOf(item) >= 0) {
-        advert.rate += 1;
+    if (guests !== 'any' &&
+        guests !== advert.offer.guests.toString()) {
+      return false;
+    }
+
+    for (var i = 0; i < features.length; i++) {
+      if (advert.offer.features.indexOf(features[i]) < 0) {
+        return false;
       }
-    });
-
-    if (advert.offer.price >= price.min &&
-        advert.offer.price <= price.max) {
-      advert.rate += 1;
     }
+
+    return true;
+
   }
 
   function updateMapPins() {
     cleanMap();
     filterData = getFilterData();
-    renderPins(baseData.map(function (item) {
-      getRate(item);
-      return item;
-    })
-      .filter(function (item) {
-        return item.rate === filterData.rate;
-      })
-    );
+    var newMapPins = baseData.filter(function (offer) {
+      return filtrateOffer(offer);
+    });
+    renderPins(newMapPins);
   }
 
   function activateMap(data) {
