@@ -37,18 +37,23 @@
   };
 
   function getFilterData() {
-    var initialData = new FormData(filter);
-    var entries = initialData.entries();
-    var entry;
+    var elements = filter.elements;
     var data = {
-      features: [],
+      features: []
     };
 
-    while (!(entry = entries.next()).done) {
-      if (entry.value[0] === 'features') {
-        data.features.push([entry.value[1]]);
-      } else {
-        data[entry.value[0]] = entry.value[1];
+    for (var i = 0; i < elements.length; i++) {
+      if (elements[i].className === 'map__filter') {
+        data[elements[i].name] = elements[i].value;
+      }
+
+      if (elements[i].className === 'map__features') {
+        var features = elements[i].elements;
+        for (var k = 0; k < features.length; k++) {
+          if (features[k].checked) {
+            data.features.push(features[k].value);
+          }
+        }
       }
     }
 
@@ -79,13 +84,13 @@
     }
 
     filterData.features.forEach(function (item) {
-      if (advert.offer.features.indexOf(item[0]) >= 0) {
+      if (advert.offer.features.indexOf(item) >= 0) {
         advert.rate += 1;
       }
     });
 
-    if (advert.offer.price > price.min &&
-        advert.offer.price < price.max) {
+    if (advert.offer.price >= price.min &&
+        advert.offer.price <= price.max) {
       advert.rate += 1;
     }
   }
@@ -109,14 +114,6 @@
     renderPins(data);
   }
 
-  function cleanMap() {
-    window.card.closeOfferCard();
-    var pinButtons = mapPinsBlock.querySelectorAll('.map__pin[type=button]');
-    pinButtons.forEach(function (pin) {
-      mapPinsBlock.removeChild(pin);
-    });
-  }
-
   function activatePage() {
     if (!isPageActive) {
       window.backend.load(activateMap, window.popup.errorHandler);
@@ -129,6 +126,14 @@
         updateMapPins();
       });
     }
+  }
+
+  function cleanMap() {
+    window.card.closeOfferCard();
+    var pinButtons = mapPinsBlock.querySelectorAll('.map__pin[type=button]');
+    pinButtons.forEach(function (pin) {
+      mapPinsBlock.removeChild(pin);
+    });
   }
 
   function deactivatePage() {
