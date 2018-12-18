@@ -26,29 +26,118 @@
     mapPinsBlock.appendChild(fragment);
   }
 
+  var filter = map.querySelector('.map__filters');
+  var baseData = [];
+  var filterData = {};
+  var PriceLevels = {
+    any: {min: 0, max: Infinity},
+    low: {min: 0, max: 9999},
+    middle: {min: 10000, max: 49999},
+    high: {min: 50000, max: Infinity}
+  };
+
+  function getFilterData() {
+    var initialData = new FormData(filter);
+    var entries = initialData.entries();
+    var entry;
+    var data = {
+      features: [],
+    };
+
+    while (!(entry = entries.next()).done) {
+      if (entry.value[0] === 'features') {
+        data.features.push([entry.value[1]]);
+      } else {
+        data[entry.value[0]] = entry.value[1];
+      }
+    }
+
+    data.rate = data.features.length + 4;
+    return data;
+  }
+
+  function getRate(advert) {
+    advert.rate = 0;
+    var type = filterData['housing-type'];
+    var rooms = filterData['housing-rooms'];
+    var guests = filterData['housing-guests'];
+    var price = PriceLevels[filterData['housing-price']];
+
+    if (type === 'any' ||
+        type === advert.offer.type) {
+      advert.rate += 1;
+    }
+
+    if (rooms === 'any' ||
+        rooms === advert.offer.rooms.toString()) {
+      advert.rate += 1;
+    }
+
+    if (guests === 'any' ||
+        guests === advert.offer.guests.toString()) {
+      advert.rate += 1;
+    }
+
+    filterData.features.forEach(function (item) {
+      if (advert.offer.features.indexOf(item[0]) >= 0) {
+        advert.rate += 1;
+      }
+    });
+
+    if (advert.offer.price > price.min &&
+        advert.offer.price < price.max) {
+      advert.rate += 1;
+    }
+  }
+
+  function updateMapPins() {
+    cleanMap();
+    filterData = getFilterData();
+    renderPins(baseData.map(function (item) {
+      getRate(item);
+      return item;
+    })
+      .filter(function (item) {
+        return item.rate === filterData.rate;
+      })
+    );
+  }
+
+  function activateMap(data) {
+    baseData = data;
+    map.classList.remove('map--faded');
+    renderPins(data);
+  }
+
+  function cleanMap() {
+    window.card.closeOfferCard();
+    var pinButtons = mapPinsBlock.querySelectorAll('.map__pin[type=button]');
+    pinButtons.forEach(function (pin) {
+      mapPinsBlock.removeChild(pin);
+    });
+  }
+
   function activatePage() {
     if (!isPageActive) {
-      map.classList.remove('map--faded');
-      window.backend.load(renderPins, window.popup.errorHandler);
+      window.backend.load(activateMap, window.popup.errorHandler);
       form.classList.remove('ad-form--disabled');
-      for (var i = 0; i < formFieldsets.length; i++) {
-        formFieldsets[i].disabled = false;
-      }
+      formFieldsets.forEach(function (field) {
+        field.disabled = false;
+      });
       isPageActive = true;
+      filter.addEventListener('change', function () {
+        updateMapPins();
+      });
     }
   }
 
   function deactivatePage() {
-    var pinButtons = mapPinsBlock.querySelectorAll('.map__pin[type=button]');
-    window.card.closeOfferCard();
+    cleanMap();
     map.classList.add('map--faded');
     form.classList.add('ad-form--disabled');
-    for (var i = 0; i < pinButtons.length; i++) {
-      mapPinsBlock.removeChild(pinButtons[i]);
-    }
-    for (var k = 0; k < formFieldsets.length; k++) {
-      formFieldsets[k].disabled = true;
-    }
+    formFieldsets.forEach(function (field) {
+      field.disabled = true;
+    });
     pinMain.style.left = PINMAIN_START_X + 'px';
     pinMain.style.top = PINMAIN_START_Y + 'px';
     var pinMainCoord = getPinCenterCoords(pinMain);
