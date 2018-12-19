@@ -19,7 +19,8 @@
 
   function renderPins(list) {
     var fragment = document.createDocumentFragment();
-    for (var i = 0; i < list.length; i++) {
+    var listLength = list.length > 5 ? 5 : list.length;
+    for (var i = 0; i < listLength; i++) {
       if (list[i].offer) {
         var pin = window.pin(list[i]);
         fragment.appendChild(pin);
