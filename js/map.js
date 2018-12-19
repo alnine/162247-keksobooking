@@ -15,7 +15,7 @@
   var formFieldsets = form.querySelectorAll('fieldset');
   var formAddressField = form.querySelector('#address');
   var filter = map.querySelector('.map__filters');
-  var baseData = [];
+  var initialAdsData = [];
 
   function renderPins(list) {
     var fragment = document.createDocumentFragment();
@@ -29,16 +29,13 @@
     mapPinsBlock.appendChild(fragment);
   }
 
-  function updateMapPins(filterValue) {
+  function updateMapPins() {
     cleanMap();
-    var newMapPins = baseData.filter(function (offer) {
-      return window.filter.filtrateOffer(offer, filterValue);
-    });
-    renderPins(newMapPins);
+    renderPins(window.filterAds(initialAdsData));
   }
 
   function activateMap(data) {
-    baseData = data;
+    initialAdsData = data;
     map.classList.remove('map--faded');
     renderPins(data);
   }
@@ -52,9 +49,8 @@
       });
       isPageActive = true;
       filter.addEventListener('change', function () {
-        var filterData = window.filter.getFilterData(filter);
         window.util.debounce(function () {
-          updateMapPins(filterData);
+          updateMapPins();
         });
       });
     }
