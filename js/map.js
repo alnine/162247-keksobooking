@@ -52,7 +52,9 @@
       isPageActive = true;
       filter.addEventListener('change', function () {
         var filterData = window.filter.getFilterData(filter);
-        updateMapPins(filterData);
+        window.util.debounce(function () {
+          updateMapPins(filterData);
+        });
       });
     }
   }
