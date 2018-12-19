@@ -14,6 +14,8 @@
   var form = document.querySelector('.ad-form');
   var formFieldsets = form.querySelectorAll('fieldset');
   var formAddressField = form.querySelector('#address');
+  var filter = map.querySelector('.map__filters');
+  var baseData = [];
 
   function renderPins(list) {
     var fragment = document.createDocumentFragment();
@@ -26,82 +28,10 @@
     mapPinsBlock.appendChild(fragment);
   }
 
-  var filter = map.querySelector('.map__filters');
-  var baseData = [];
-  var filterData = {};
-  var PriceLevels = {
-    any: {min: 0, max: Infinity},
-    low: {min: 0, max: 9999},
-    middle: {min: 10000, max: 49999},
-    high: {min: 50000, max: Infinity}
-  };
-
-  function getFilterData() {
-    var elements = filter.elements;
-    var data = {
-      features: []
-    };
-
-    for (var i = 0; i < elements.length; i++) {
-      if (elements[i].className === 'map__filter') {
-        data[elements[i].name] = elements[i].value;
-      }
-
-      if (elements[i].className === 'map__features') {
-        var features = elements[i].elements;
-        for (var k = 0; k < features.length; k++) {
-          if (features[k].checked) {
-            data.features.push(features[k].value);
-          }
-        }
-      }
-    }
-
-    data.rate = data.features.length + 4;
-    return data;
-  }
-
-  function filtrateOffer(advert) {
-    var type = filterData['housing-type'];
-    var price = PriceLevels[filterData['housing-price']];
-    var rooms = filterData['housing-rooms'];
-    var guests = filterData['housing-guests'];
-    var features = filterData.features;
-
-    if (type !== 'any' && type !== advert.offer.type) {
-      return false;
-    }
-
-    if (advert.offer.price < price.min ||
-        advert.offer.price > price.max) {
-      return false;
-    }
-
-    if (rooms !== 'any' &&
-        rooms !== advert.offer.rooms.toString()) {
-      return false;
-    }
-
-    if (guests !== 'any' &&
-        guests !== advert.offer.guests.toString()) {
-      return false;
-    }
-
-    for (var i = 0; i < features.length; i++) {
-      if (advert.offer.features.indexOf(features[i]) < 0) {
-        return false;
-      }
-    }
-
-    return true;
-
-  }
-
-  function updateMapPins() {
+  function updateMapPins(filterValue) {
     cleanMap();
-    filterData = getFilterData();
     var newMapPins = baseData.filter(function (offer) {
-      return filtrateOffer(offer);
+      return window.filter.filtrateOffer(offer, filterValue);
     });
     renderPins(newMapPins);
   }
@@ -121,7 +51,8 @@
       });
       isPageActive = true;
       filter.addEventListener('change', function () {
-        updateMapPins();
+        var filterData = window.filter.getFilterData(filter);
+        updateMapPins(filterData);
       });
     }
   }
