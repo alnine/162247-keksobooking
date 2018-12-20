@@ -31,7 +31,7 @@
 
   function updateMapPins() {
     cleanMap();
-    renderPins(window.filterAds(initialAdsData));
+    renderPins(window.filter.getFilteredAds(initialAdsData));
   }
 
   function activateMap(data) {
@@ -48,11 +48,7 @@
         field.disabled = false;
       });
       isPageActive = true;
-      filter.addEventListener('change', function () {
-        window.util.debounce(function () {
-          updateMapPins();
-        });
-      });
+      filter.addEventListener('change', window.filter.filterChangeHandler);
     }
   }
 
@@ -76,6 +72,7 @@
     var pinMainCoord = getPinCenterCoords(pinMain);
     fillValueAddressField(pinMainCoord);
     isPageActive = false;
+    filter.removeEventListener('change', window.filter.filterChangeHandler);
   }
 
   function getPinCenterCoords(pin) {
@@ -163,7 +160,8 @@
   });
 
   window.map = {
-    deactivatePage: deactivatePage
+    deactivatePage: deactivatePage,
+    updateMapPins:updateMapPins
   };
 
 })();

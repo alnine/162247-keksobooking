@@ -11,6 +11,12 @@
 
   var filterForm = document.querySelector('.map__filters');
 
+  function filterChangeHandler() {
+    window.util.debounce(function () {
+      window.map.updateMapPins();
+    });
+  }
+
   function getFilterData() {
     var elements = filterForm.elements;
     var data = {
@@ -79,6 +85,9 @@
     return result;
   }
 
-  window.filterAds = getFilteredAds;
+  window.filter = {
+    filterChangeHandler: filterChangeHandler,
+    getFilteredAds: getFilteredAds
+  };
 })();
 
