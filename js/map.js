@@ -161,7 +161,7 @@
 
   window.map = {
     deactivatePage: deactivatePage,
-    updateMapPins:updateMapPins
+    updateMapPins: updateMapPins
   };
 
 })();
