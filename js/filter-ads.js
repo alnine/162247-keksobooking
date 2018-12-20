@@ -3,10 +3,10 @@
 (function () {
 
   var PriceLevels = {
-    any: {min: 0, max: Infinity},
-    low: {min: 0, max: 9999},
-    middle: {min: 10000, max: 49999},
-    high: {min: 50000, max: Infinity}
+    ANY: {min: 0, max: Infinity},
+    LOW: {min: 0, max: 9999},
+    MIDDLE: {min: 10000, max: 49999},
+    HIGH: {min: 50000, max: Infinity}
   };
 
   var filterForm = document.querySelector('.map__filters');
@@ -37,7 +37,7 @@
 
   function isAdMatch(ad, filterValue) {
     var type = filterValue['housing-type'];
-    var price = PriceLevels[filterValue['housing-price']];
+    var price = PriceLevels[filterValue['housing-price'].toUpperCase()];
     var rooms = filterValue['housing-rooms'];
     var guests = filterValue['housing-guests'];
     var features = filterValue.features;
