@@ -620,6 +620,11 @@ fieldset {
   border-color: #ffaa99;
 }
 
+.ad-form__element input:invalid,
+.ad-form__element select:invalid {
+  border: 2px solid #ffaa99;
+}
+
 .ad-form__element input:focus,
 .ad-form__element select:focus,
 .ad-form__element textarea:focus {
