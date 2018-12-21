@@ -6,9 +6,9 @@
   var DEBOUNCE_INTERVAL = 500;
   var lastTimeout;
 
-  function isEscEvent(evt, action) {
+  function isEscEvent(evt, callback) {
     if (evt.keyCode === ESC_KEYCODE) {
-      action();
+      callback();
     }
   }
 
