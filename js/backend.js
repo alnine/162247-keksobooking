@@ -8,24 +8,24 @@
   var URL_LOAD = 'https://js.dump.academy/keksobooking/data';
   var URL_UPLOAD = 'https://js.dump.academy/keksobooking';
 
-  function createRequest(success, error) {
+  function createRequest(onSuccess, onError) {
     var request = new XMLHttpRequest();
     request.responseType = REPSONSE_TYPE;
 
     request.addEventListener('load', function () {
       if (request.status === SUCCESS_STATE_CODE) {
-        success(request.response);
+        onSuccess(request.response);
       } else {
-        error('Ошибка: ' + request.status + ' ' + request.statusText);
+        onError('Ошибка: ' + request.status + ' ' + request.statusText);
       }
     });
 
     request.addEventListener('error', function () {
-      error('Ошибка соединения. Проверьте подключение');
+      onError('Ошибка соединения. Проверьте подключение');
     });
 
     request.addEventListener('timeout', function () {
-      error('Сервер долго не отвечает. Повторите попытку');
+      onError('Сервер долго не отвечает. Повторите попытку');
     });
 
     request.timeout = REQUEST_TIMEOUT;
