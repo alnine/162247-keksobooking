@@ -24,6 +24,7 @@
   };
 
   var adForm = document.querySelector('.ad-form');
+  var formFieldsets = adForm.querySelectorAll('fieldset');
 
   var adFormRoomSelect = adForm.querySelector('#room_number');
   var adFormCapasitySelect = adForm.querySelector('#capacity');
@@ -49,31 +50,59 @@
     adFormPriceField.placeholder = MinPriceHousing[key];
   }
 
-  adForm.addEventListener('submit', function (evt) {
+  function timeInChangeHandler() {
+    var timeSelect = adFormTimeInSelect.value;
+    adFormTimeOutSelect.value = timeSelect;
+  }
+
+  function timeOutChangeHandler() {
+    var timeSelect = adFormTimeOutSelect.value;
+    adFormTimeInSelect.value = timeSelect;
+  }
+
+  function formSubmitHandler(evt) {
     evt.preventDefault();
     window.backend.upload(new FormData(adForm), window.popup.successHandler, window.popup.errorHandler);
-  });
+  }
 
-  adForm.addEventListener('reset', function () {
+  function formResetHandler() {
     setTimeout(function () {
       window.map.deactivatePage();
       setMinPrice();
     }, 0);
-  });
+  }
 
-  adFormRoomSelect.addEventListener('change', roomSelectChangeHandler);
-  adFormCapasitySelect.addEventListener('change', roomSelectChangeHandler);
+  function activateForm() {
+    adForm.classList.remove('ad-form--disabled');
+    formFieldsets.forEach(function (field) {
+      field.disabled = false;
+    });
+    adForm.addEventListener('submit', formSubmitHandler);
+    adForm.addEventListener('reset', formResetHandler);
+    adFormTypeSelect.addEventListener('change', setMinPrice);
+    adFormRoomSelect.addEventListener('change', roomSelectChangeHandler);
+    adFormCapasitySelect.addEventListener('change', roomSelectChangeHandler);
+    adFormTimeInSelect.addEventListener('change', timeInChangeHandler);
+    adFormTimeOutSelect.addEventListener('change', timeOutChangeHandler);
+  }
 
-  adFormTypeSelect.addEventListener('change', setMinPrice);
+  function deactivateForm() {
+    adForm.classList.add('ad-form--disabled');
+    formFieldsets.forEach(function (field) {
+      field.disabled = true;
+    });
+    adForm.removeEventListener('submit', formSubmitHandler);
+    adForm.removeEventListener('reset', formResetHandler);
+    adFormTypeSelect.removeEventListener('change', setMinPrice);
+    adFormRoomSelect.removeEventListener('change', roomSelectChangeHandler);
+    adFormCapasitySelect.removeEventListener('change', roomSelectChangeHandler);
+    adFormTimeInSelect.removeEventListener('change', timeInChangeHandler);
+    adFormTimeOutSelect.removeEventListener('change', timeOutChangeHandler);
+  }
 
-  adFormTimeInSelect.addEventListener('change', function () {
-    var timeSelect = adFormTimeInSelect.value;
-    adFormTimeOutSelect.value = timeSelect;
-  });
-
-  adFormTimeOutSelect.addEventListener('change', function () {
-    var timeSelect = adFormTimeOutSelect.value;
-    adFormTimeInSelect.value = timeSelect;
-  });
+  window.form = {
+    activateForm: activateForm,
+    deactivateForm: deactivateForm
+  };
 
 })();
