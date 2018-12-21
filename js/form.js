@@ -67,7 +67,7 @@
   }
 
   function submitClickHandler(evt) {
-    if (adForm.checkValidity() === false) {
+    if (!adForm.checkValidity()) {
       adForm.classList.add('ad-form--invalid');
     } else {
       evt.preventDefault();
