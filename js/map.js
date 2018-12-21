@@ -61,7 +61,6 @@
     isPageActive = true;
   }
 
-
   function activatePage() {
     if (!isPageActive) {
       window.backend.load(successDataLoadHandler, window.popup.errorHandler);
@@ -113,7 +112,7 @@
 
     var addressCoords = {};
 
-    function onPinMouseMove(moveEvt) {
+    function pinMouseMoveHandler(moveEvt) {
       moveEvt.preventDefault();
       activatePage();
 
@@ -151,17 +150,17 @@
       };
     }
 
-    function onPinMouseUp(upEvt) {
+    function pinMouseUpHandler(upEvt) {
       upEvt.preventDefault();
       activatePage();
       addressCoords = getPinTailCoords(pinMain);
       fillValueAddressField(addressCoords);
-      document.removeEventListener('mousemove', onPinMouseMove);
-      document.removeEventListener('mouseup', onPinMouseUp);
+      document.removeEventListener('mousemove', pinMouseMoveHandler);
+      document.removeEventListener('mouseup', pinMouseUpHandler);
     }
 
-    document.addEventListener('mousemove', onPinMouseMove);
-    document.addEventListener('mouseup', onPinMouseUp);
+    document.addEventListener('mousemove', pinMouseMoveHandler);
+    document.addEventListener('mouseup', pinMouseUpHandler);
   });
 
   window.map = {
