@@ -7,6 +7,7 @@
   var MAP_LIMIT_Y_MAX = 630;
   var PINMAIN_START_X = 570;
   var PINMAIN_START_Y = 375;
+  var MAX_PIN_RENDER = 5;
   var isPageActive = false;
   var map = document.querySelector('.map');
   var mapPinsBlock = document.querySelector('.map__pins');
@@ -18,8 +19,8 @@
 
   function renderPins(list) {
     var fragment = document.createDocumentFragment();
-    var listLength = list.length > 5 ? 5 : list.length;
-    for (var i = 0; i < listLength; i++) {
+    var maxPinsOnMap = Math.min(list.length, MAX_PIN_RENDER);
+    for (var i = 0; i < maxPinsOnMap; i++) {
       if (list[i].offer) {
         var pin = window.pin(list[i]);
         fragment.appendChild(pin);
