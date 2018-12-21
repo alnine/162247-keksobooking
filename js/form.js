@@ -24,6 +24,8 @@
   };
 
   var adForm = document.querySelector('.ad-form');
+  var adFormSubmit = adForm.querySelector('.ad-form__submit');
+  var adFormReset = adForm.querySelector('.ad-form__reset');
   var formFieldsets = adForm.querySelectorAll('fieldset');
   var formAddressField = adForm.querySelector('#address');
   var adFormRoomSelect = adForm.querySelector('#room_number');
@@ -64,16 +66,25 @@
     adFormTimeInSelect.value = timeSelect;
   }
 
-  function formSubmitHandler(evt) {
-    evt.preventDefault();
-    window.backend.upload(new FormData(adForm), window.popup.successHandler, window.popup.errorHandler);
+  function submitClickHandler(evt) {
+    if (!adForm.checkValidity()) {
+      adForm.classList.add('ad-form--invalid');
+    } else {
+      evt.preventDefault();
+      adForm.classList.remove('ad-form--invalid');
+      window.backend.upload(new FormData(adForm), window.popup.successHandler, window.popup.errorHandler);
+    }
   }
 
-  function formResetHandler() {
-    setTimeout(function () {
-      window.map.deactivatePage();
-      setMinPrice();
-    }, 0);
+  function resetForm() {
+    adForm.reset();
+    window.map.deactivatePage();
+    setMinPrice();
+  }
+
+  function resetClickHandler(evt) {
+    evt.preventDefault();
+    resetForm();
   }
 
   function activateForm() {
@@ -81,8 +92,8 @@
     formFieldsets.forEach(function (field) {
       field.disabled = false;
     });
-    adForm.addEventListener('submit', formSubmitHandler);
-    adForm.addEventListener('reset', formResetHandler);
+    adFormSubmit.addEventListener('click', submitClickHandler);
+    adFormReset.addEventListener('click', resetClickHandler);
     adFormTypeSelect.addEventListener('change', setMinPrice);
     adFormRoomSelect.addEventListener('change', roomSelectChangeHandler);
     adFormCapasitySelect.addEventListener('change', roomSelectChangeHandler);
@@ -95,8 +106,8 @@
     formFieldsets.forEach(function (field) {
       field.disabled = true;
     });
-    adForm.removeEventListener('submit', formSubmitHandler);
-    adForm.removeEventListener('reset', formResetHandler);
+    adFormSubmit.removeEventListener('click', submitClickHandler);
+    adFormReset.removeEventListener('click', resetClickHandler);
     adFormTypeSelect.removeEventListener('change', setMinPrice);
     adFormRoomSelect.removeEventListener('change', roomSelectChangeHandler);
     adFormCapasitySelect.removeEventListener('change', roomSelectChangeHandler);
@@ -107,6 +118,7 @@
   window.form = {
     activateForm: activateForm,
     deactivateForm: deactivateForm,
+    resetForm: resetForm,
     fillValueAddressField: fillValueAddressField
   };
 

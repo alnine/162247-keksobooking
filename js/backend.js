@@ -8,24 +8,24 @@
   var URL_LOAD = 'https://js.dump.academy/keksobooking/data';
   var URL_UPLOAD = 'https://js.dump.academy/keksobooking';
 
-  function createRequest(onSuccess, onError) {
+  function createRequest(successHandler, errorHandler) {
     var request = new XMLHttpRequest();
     request.responseType = REPSONSE_TYPE;
 
     request.addEventListener('load', function () {
       if (request.status === SUCCESS_STATE_CODE) {
-        onSuccess(request.response);
+        successHandler(request.response);
       } else {
-        onError('Ошибка: ' + request.status + ' ' + request.statusText);
+        errorHandler('Ошибка: ' + request.status + ' ' + request.statusText);
       }
     });
 
     request.addEventListener('error', function () {
-      onError('Ошибка соединения. Проверьте подключение');
+      errorHandler('Ошибка соединения. Проверьте подключение');
     });
 
     request.addEventListener('timeout', function () {
-      onError('Сервер долго не отвечает. Повторите попытку');
+      errorHandler('Сервер долго не отвечает. Повторите попытку');
     });
 
     request.timeout = REQUEST_TIMEOUT;
@@ -33,14 +33,14 @@
     return request;
   }
 
-  function load(onLoad, onError) {
-    var xhr = createRequest(onLoad, onError);
+  function load(loadHandler, errorHandler) {
+    var xhr = createRequest(loadHandler, errorHandler);
     xhr.open('GET', URL_LOAD);
     xhr.send();
   }
 
-  function upload(data, onLoad, onError) {
-    var xhr = createRequest(onLoad, onError);
+  function upload(data, loadHandler, errorHandler) {
+    var xhr = createRequest(loadHandler, errorHandler);
     xhr.open('POST', URL_UPLOAD);
     xhr.send(data);
   }

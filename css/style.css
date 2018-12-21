@@ -620,8 +620,8 @@ fieldset {
   border-color: #ffaa99;
 }
 
-.ad-form__element input:invalid,
-.ad-form__element select:invalid {
+.ad-form--invalid input:invalid,
+.ad-form--invalid select:invalid {
   border: 2px solid #ffaa99;
 }
 
