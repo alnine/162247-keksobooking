@@ -13,7 +13,6 @@
   var pinMain = mapPinsBlock.querySelector('.map__pin--main');
   var form = document.querySelector('.ad-form');
   var formFieldsets = form.querySelectorAll('fieldset');
-  var formAddressField = form.querySelector('#address');
   var filter = map.querySelector('.map__filters');
   var initialAdsData = [];
 
@@ -29,27 +28,10 @@
     mapPinsBlock.appendChild(fragment);
   }
 
-  function updateMapPins() {
-    cleanMap();
-    renderPins(window.filter.getFilteredAds(initialAdsData));
-  }
-
   function activateMap(data) {
-    initialAdsData = data;
     map.classList.remove('map--faded');
     renderPins(data);
-  }
-
-  function activatePage() {
-    if (!isPageActive) {
-      window.backend.load(activateMap, window.popup.errorHandler);
-      form.classList.remove('ad-form--disabled');
-      formFieldsets.forEach(function (field) {
-        field.disabled = false;
-      });
-      isPageActive = true;
-      filter.addEventListener('change', window.filter.filterChangeHandler);
-    }
+    filter.addEventListener('change', window.filter.filterChangeHandler);
   }
 
   function cleanMap() {
@@ -60,19 +42,40 @@
     });
   }
 
-  function deactivatePage() {
+  function updateMapPins() {
     cleanMap();
+    renderPins(window.filter.getFilteredAds(initialAdsData));
+  }
+
+  function deactivateMap() {
     map.classList.add('map--faded');
-    form.classList.add('ad-form--disabled');
-    formFieldsets.forEach(function (field) {
-      field.disabled = true;
-    });
+    cleanMap();
+    filter.removeEventListener('change', window.filter.filterChangeHandler);
+  }
+
+  function successDataLoadHandler(data) {
+    initialAdsData = data;
+    activateMap(initialAdsData);
+    window.form.activateForm();
+    isPageActive = true;
+  }
+
+  function activatePage() {
+    if (!isPageActive) {
+      window.backend.load(successDataLoadHandler, window.popup.errorHandler);
+    }
+  }
+
+  function deactivatePage() {
+    if (isPageActive) {
+      deactivateMap();
+      window.form.deactivateForm();
+    }
     pinMain.style.left = PINMAIN_START_X + 'px';
     pinMain.style.top = PINMAIN_START_Y + 'px';
     var pinMainCoord = getPinCenterCoords(pinMain);
-    fillValueAddressField(pinMainCoord);
+    window.form.fillValueAddressField(pinMainCoord);
     isPageActive = false;
-    filter.removeEventListener('change', window.filter.filterChangeHandler);
   }
 
   function getPinCenterCoords(pin) {
@@ -87,12 +90,8 @@
     return {x: pinX, y: pinY};
   }
 
-  function fillValueAddressField(coords) {
-    formAddressField.value = coords.x + ', ' + coords.y;
-  }
-
   var pinMainStartCoords = getPinCenterCoords(pinMain);
-  fillValueAddressField(pinMainStartCoords);
+  window.form.fillValueAddressField(pinMainStartCoords);
 
   for (var i = 0; i < formFieldsets.length; i++) {
     formFieldsets[i].disabled = true;
@@ -108,7 +107,7 @@
 
     var addressCoords = {};
 
-    function onPinMouseMove(moveEvt) {
+    function pinMouseMoveHandler(moveEvt) {
       moveEvt.preventDefault();
       activatePage();
 
@@ -138,7 +137,7 @@
       }
 
       addressCoords = getPinTailCoords(pinMain);
-      fillValueAddressField(addressCoords);
+      window.form.fillValueAddressField(addressCoords);
 
       startCoords = {
         x: moveEvt.pageX,
@@ -146,17 +145,17 @@
       };
     }
 
-    function onPinMouseUp(upEvt) {
+    function pinMouseUpHandler(upEvt) {
       upEvt.preventDefault();
       activatePage();
       addressCoords = getPinTailCoords(pinMain);
-      fillValueAddressField(addressCoords);
-      document.removeEventListener('mousemove', onPinMouseMove);
-      document.removeEventListener('mouseup', onPinMouseUp);
+      window.form.fillValueAddressField(addressCoords);
+      document.removeEventListener('mousemove', pinMouseMoveHandler);
+      document.removeEventListener('mouseup', pinMouseUpHandler);
     }
 
-    document.addEventListener('mousemove', onPinMouseMove);
-    document.addEventListener('mouseup', onPinMouseUp);
+    document.addEventListener('mousemove', pinMouseMoveHandler);
+    document.addEventListener('mouseup', pinMouseUpHandler);
   });
 
   window.map = {
