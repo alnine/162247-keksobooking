@@ -16,8 +16,8 @@
                         .content
                         .querySelector('.map__pin');
     var pinItem = pinTemplate.cloneNode(true);
-    pinItem.style.cssText = 'left: ' + data.location.x + 'px; '
-                           + 'top: ' + data.location.y + 'px;';
+    pinItem.style.top = data.location.y + 'px';
+    pinItem.style.left = data.location.x + 'px';
     pinItem.querySelector('img').src = data.author.avatar;
     pinItem.querySelector('img').alt = data.offer.title;
     pinItem.addEventListener('click', function () {
