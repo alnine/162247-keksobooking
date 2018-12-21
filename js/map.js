@@ -13,7 +13,6 @@
   var pinMain = mapPinsBlock.querySelector('.map__pin--main');
   var form = document.querySelector('.ad-form');
   var formFieldsets = form.querySelectorAll('fieldset');
-  var formAddressField = form.querySelector('#address');
   var filter = map.querySelector('.map__filters');
   var initialAdsData = [];
 
@@ -75,7 +74,7 @@
     pinMain.style.left = PINMAIN_START_X + 'px';
     pinMain.style.top = PINMAIN_START_Y + 'px';
     var pinMainCoord = getPinCenterCoords(pinMain);
-    fillValueAddressField(pinMainCoord);
+    window.form.fillValueAddressField(pinMainCoord);
     isPageActive = false;
   }
 
@@ -91,12 +90,8 @@
     return {x: pinX, y: pinY};
   }
 
-  function fillValueAddressField(coords) {
-    formAddressField.value = coords.x + ', ' + coords.y;
-  }
-
   var pinMainStartCoords = getPinCenterCoords(pinMain);
-  fillValueAddressField(pinMainStartCoords);
+  window.form.fillValueAddressField(pinMainStartCoords);
 
   for (var i = 0; i < formFieldsets.length; i++) {
     formFieldsets[i].disabled = true;
@@ -142,7 +137,7 @@
       }
 
       addressCoords = getPinTailCoords(pinMain);
-      fillValueAddressField(addressCoords);
+      window.form.fillValueAddressField(addressCoords);
 
       startCoords = {
         x: moveEvt.pageX,
@@ -154,7 +149,7 @@
       upEvt.preventDefault();
       activatePage();
       addressCoords = getPinTailCoords(pinMain);
-      fillValueAddressField(addressCoords);
+      window.form.fillValueAddressField(addressCoords);
       document.removeEventListener('mousemove', pinMouseMoveHandler);
       document.removeEventListener('mouseup', pinMouseUpHandler);
     }

@@ -25,13 +25,17 @@
 
   var adForm = document.querySelector('.ad-form');
   var formFieldsets = adForm.querySelectorAll('fieldset');
-
+  var formAddressField = adForm.querySelector('#address');
   var adFormRoomSelect = adForm.querySelector('#room_number');
   var adFormCapasitySelect = adForm.querySelector('#capacity');
   var adFormPriceField = adForm.querySelector('#price');
   var adFormTypeSelect = adForm.querySelector('#type');
   var adFormTimeInSelect = adForm.querySelector('#timein');
   var adFormTimeOutSelect = adForm.querySelector('#timeout');
+
+  function fillValueAddressField(coords) {
+    formAddressField.value = coords.x + ', ' + coords.y;
+  }
 
   function roomSelectChangeHandler() {
     var guests = GuestPerRoom['ROOM_' + adFormRoomSelect.value];
@@ -102,7 +106,8 @@
 
   window.form = {
     activateForm: activateForm,
-    deactivateForm: deactivateForm
+    deactivateForm: deactivateForm,
+    fillValueAddressField: fillValueAddressField
   };
 
 })();
