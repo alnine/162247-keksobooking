@@ -29,27 +29,10 @@
     mapPinsBlock.appendChild(fragment);
   }
 
-  function updateMapPins() {
-    cleanMap();
-    renderPins(window.filter.getFilteredAds(initialAdsData));
-  }
-
   function activateMap(data) {
-    initialAdsData = data;
     map.classList.remove('map--faded');
     renderPins(data);
-  }
-
-  function activatePage() {
-    if (!isPageActive) {
-      window.backend.load(activateMap, window.popup.errorHandler);
-      form.classList.remove('ad-form--disabled');
-      formFieldsets.forEach(function (field) {
-        field.disabled = false;
-      });
-      isPageActive = true;
-      filter.addEventListener('change', window.filter.filterChangeHandler);
-    }
+    filter.addEventListener('change', window.filter.filterChangeHandler);
   }
 
   function cleanMap() {
@@ -60,19 +43,41 @@
     });
   }
 
-  function deactivatePage() {
+  function updateMapPins() {
     cleanMap();
+    renderPins(window.filter.getFilteredAds(initialAdsData));
+  }
+
+  function deactivateMap() {
     map.classList.add('map--faded');
-    form.classList.add('ad-form--disabled');
-    formFieldsets.forEach(function (field) {
-      field.disabled = true;
-    });
+    cleanMap();
+    filter.removeEventListener('change', window.filter.filterChangeHandler);
+  }
+
+  function successDataLoadHandler(data) {
+    initialAdsData = data;
+    activateMap(initialAdsData);
+    window.form.activateForm();
+    isPageActive = true;
+  }
+
+
+  function activatePage() {
+    if (!isPageActive) {
+      window.backend.load(successDataLoadHandler, window.popup.errorHandler);
+    }
+  }
+
+  function deactivatePage() {
+    if (isPageActive) {
+      deactivateMap();
+      window.form.deactivateForm();
+    }
     pinMain.style.left = PINMAIN_START_X + 'px';
     pinMain.style.top = PINMAIN_START_Y + 'px';
     var pinMainCoord = getPinCenterCoords(pinMain);
     fillValueAddressField(pinMainCoord);
     isPageActive = false;
-    filter.removeEventListener('change', window.filter.filterChangeHandler);
   }
 
   function getPinCenterCoords(pin) {
