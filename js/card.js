@@ -42,6 +42,8 @@
   function closeOfferCard() {
     var offerCard = map.querySelector('.map__card.popup');
     if (offerCard) {
+      var activePin = map.querySelector('.map__pin--active');
+      activePin.classList.remove('map__pin--active');
       map.removeChild(offerCard);
       document.removeEventListener('keydown', offerCardEscHandler);
     }

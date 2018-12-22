@@ -22,6 +22,7 @@
     pinItem.querySelector('img').alt = data.offer.title;
     pinItem.addEventListener('click', function () {
       openOfferCard(data);
+      pinItem.classList.add('map__pin--active');
     });
     return pinItem;
   }
