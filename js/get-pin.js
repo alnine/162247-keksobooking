@@ -2,12 +2,11 @@
 
 (function () {
 
-  var map = document.querySelector('.map');
-  var mapFilters = map.querySelector('.map__filters-container');
+  var mapFilters = document.querySelector('.map__filters-container');
 
   function openOfferCard(data) {
     window.card.closeOfferCard();
-    map.insertBefore(window.card.getOfferCardLayout(data), mapFilters);
+    window.map.mapElement.insertBefore(window.card.getOfferCardLayout(data), mapFilters);
     document.addEventListener('keydown', window.card.offerCardEscHandler);
   }
 

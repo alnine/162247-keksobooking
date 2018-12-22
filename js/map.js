@@ -9,12 +9,11 @@
   var PINMAIN_START_Y = 375;
   var MAX_PIN_RENDER = 5;
   var isPageActive = false;
-  var map = document.querySelector('.map');
+  var mapElement = document.querySelector('.map');
   var mapPinsBlock = document.querySelector('.map__pins');
   var pinMain = mapPinsBlock.querySelector('.map__pin--main');
   var form = document.querySelector('.ad-form');
   var formFieldsets = form.querySelectorAll('fieldset');
-  var filter = map.querySelector('.map__filters');
   var initialAdsData = [];
 
   function renderPins(list) {
@@ -30,9 +29,9 @@
   }
 
   function activateMap(data) {
-    map.classList.remove('map--faded');
+    mapElement.classList.remove('map--faded');
     renderPins(data);
-    filter.addEventListener('change', window.filter.filterChangeHandler);
+    window.filter.filterForm.addEventListener('change', window.filter.filterChangeHandler);
   }
 
   function cleanMap() {
@@ -49,9 +48,9 @@
   }
 
   function deactivateMap() {
-    map.classList.add('map--faded');
+    mapElement.classList.add('map--faded');
     cleanMap();
-    filter.removeEventListener('change', window.filter.filterChangeHandler);
+    window.filter.filterForm.removeEventListener('change', window.filter.filterChangeHandler);
   }
 
   function successDataLoadHandler(data) {
@@ -116,7 +115,7 @@
         top: MAP_LIMIT_Y_MIN - pinMain.clientHeight - TAIL_HEIGHT,
         bottom: MAP_LIMIT_Y_MAX - pinMain.clientHeight - TAIL_HEIGHT,
         left: 0 - pinMain.clientWidth / 2,
-        right: map.clientWidth - pinMain.clientWidth / 2
+        right: mapElement.clientWidth - pinMain.clientWidth / 2
       };
 
       var shift = {
@@ -160,6 +159,7 @@
   });
 
   window.map = {
+    mapElement: mapElement,
     deactivatePage: deactivatePage,
     updateMapPins: updateMapPins
   };

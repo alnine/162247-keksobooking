@@ -86,6 +86,7 @@
   }
 
   window.filter = {
+    filterForm: filterForm,
     filterChangeHandler: filterChangeHandler,
     getFilteredAdverts: getFilteredAdverts
   };
