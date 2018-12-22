@@ -22,7 +22,7 @@
     var maxPinsOnMap = Math.min(list.length, MAX_PIN_RENDER);
     for (var i = 0; i < maxPinsOnMap; i++) {
       if (list[i].offer) {
-        var pin = window.pin(list[i]);
+        var pin = window.getPin(list[i]);
         fragment.appendChild(pin);
       }
     }

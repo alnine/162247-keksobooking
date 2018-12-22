@@ -27,6 +27,6 @@
     return pinItem;
   }
 
-  window.pin = getPinItemLayout;
+  window.getPin = getPinItemLayout;
 
 })();
