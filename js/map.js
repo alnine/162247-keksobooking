@@ -93,9 +93,9 @@
   var pinMainStartCoords = getPinCenterCoords(pinMain);
   window.form.fillValueAddressField(pinMainStartCoords);
 
-  for (var i = 0; i < formFieldsets.length; i++) {
-    formFieldsets[i].disabled = true;
-  }
+  formFieldsets.forEach(function (fieldset) {
+    fieldset.disabled = true;
+  });
 
   pinMain.addEventListener('mousedown', function (downEvt) {
     downEvt.preventDefault();

@@ -18,12 +18,27 @@
   }
 
   function getFilterData() {
-    var elements = filterForm.elements;
+    var fields = Array.from(filterForm.elements);
     var data = {
       features: []
     };
 
-    for (var i = 0; i < elements.length; i++) {
+    fields.forEach(function (field) {
+      if (field.className === 'map__filter') {
+        data[field.name] = field.value;
+      }
+
+      if (field.className === 'map__features') {
+        var features = Array.from(field.elements);
+        features.forEach(function (feature) {
+          if (feature.checked) {
+            data.features.push(feature.value);
+          }
+        });
+      }
+    });
+
+    /* for (var i = 0; i < elements.length; i++) {
       if (elements[i].className === 'map__filter') {
         data[elements[i].name] = elements[i].value;
       }
@@ -36,7 +51,7 @@
           }
         }
       }
-    }
+    } */
 
     return data;
   }
