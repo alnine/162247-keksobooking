@@ -43,11 +43,7 @@
     var guests = GuestPerRoom['ROOM_' + adFormRoomSelect.value];
     var errorMessage = GuestErrorMessage['ROOM_' + adFormRoomSelect.value];
     var isMatch = guests.includes(adFormCapasitySelect.value);
-    if (isMatch) {
-      adFormCapasitySelect.setCustomValidity('');
-    } else {
-      adFormCapasitySelect.setCustomValidity(errorMessage);
-    }
+    adFormCapasitySelect.setCustomValidity(isMatch ? '' : errorMessage);
   }
 
   function typeChangeHandler() {
