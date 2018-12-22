@@ -50,7 +50,7 @@
     }
   }
 
-  function setMinPrice() {
+  function typeChangeHandler() {
     var key = adFormTypeSelect.value.toUpperCase();
     adFormPriceField.min = MinPriceHousing[key];
     adFormPriceField.placeholder = MinPriceHousing[key];
@@ -79,7 +79,7 @@
   function resetForm() {
     adForm.reset();
     window.map.deactivatePage();
-    setMinPrice();
+    typeChangeHandler();
   }
 
   function resetClickHandler(evt) {
@@ -94,7 +94,7 @@
     });
     adFormSubmit.addEventListener('click', submitClickHandler);
     adFormReset.addEventListener('click', resetClickHandler);
-    adFormTypeSelect.addEventListener('change', setMinPrice);
+    adFormTypeSelect.addEventListener('change', typeChangeHandler);
     adFormRoomSelect.addEventListener('change', roomSelectChangeHandler);
     adFormCapasitySelect.addEventListener('change', roomSelectChangeHandler);
     adFormTimeInSelect.addEventListener('change', timeInChangeHandler);
@@ -108,7 +108,7 @@
     });
     adFormSubmit.removeEventListener('click', submitClickHandler);
     adFormReset.removeEventListener('click', resetClickHandler);
-    adFormTypeSelect.removeEventListener('change', setMinPrice);
+    adFormTypeSelect.removeEventListener('change', typeChangeHandler);
     adFormRoomSelect.removeEventListener('change', roomSelectChangeHandler);
     adFormCapasitySelect.removeEventListener('change', roomSelectChangeHandler);
     adFormTimeInSelect.removeEventListener('change', timeInChangeHandler);
