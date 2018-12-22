@@ -45,7 +45,7 @@
 
   function updateMapPins() {
     cleanMap();
-    renderPins(window.filter.getFilteredAds(initialAdsData));
+    renderPins(window.filter.getFilteredAdverts(initialAdsData));
   }
 
   function deactivateMap() {

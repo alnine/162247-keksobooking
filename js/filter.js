@@ -41,34 +41,34 @@
     return data;
   }
 
-  function isAdMatch(ad, filterValue) {
-    var type = filterValue['housing-type'];
-    var price = PriceLevels[filterValue['housing-price'].toUpperCase()];
-    var rooms = filterValue['housing-rooms'];
-    var guests = filterValue['housing-guests'];
-    var features = filterValue.features;
+  function isAdvertMatch(advert, filterOptions) {
+    var type = filterOptions['housing-type'];
+    var price = PriceLevels[filterOptions['housing-price'].toUpperCase()];
+    var rooms = filterOptions['housing-rooms'];
+    var guests = filterOptions['housing-guests'];
+    var features = filterOptions.features;
 
-    if (type !== 'any' && type !== ad.offer.type) {
+    if (type !== 'any' && type !== advert.offer.type) {
       return false;
     }
 
-    if (ad.offer.price < price.min ||
-        ad.offer.price > price.max) {
+    if (advert.offer.price < price.min ||
+        advert.offer.price > price.max) {
       return false;
     }
 
     if (rooms !== 'any' &&
-        rooms !== ad.offer.rooms.toString()) {
+        rooms !== advert.offer.rooms.toString()) {
       return false;
     }
 
     if (guests !== 'any' &&
-        guests !== ad.offer.guests.toString()) {
+        guests !== advert.offer.guests.toString()) {
       return false;
     }
 
     for (var i = 0; i < features.length; i++) {
-      if (ad.offer.features.indexOf(features[i]) < 0) {
+      if (advert.offer.features.indexOf(features[i]) < 0) {
         return false;
       }
     }
@@ -76,10 +76,10 @@
     return true;
   }
 
-  function getFilteredAds(adsData) {
+  function getFilteredAdverts(adverts) {
     var filterSelection = getFilterData();
-    var result = adsData.filter(function (ad) {
-      return isAdMatch(ad, filterSelection);
+    var result = adverts.filter(function (advert) {
+      return isAdvertMatch(advert, filterSelection);
     });
 
     return result;
@@ -87,7 +87,7 @@
 
   window.filter = {
     filterChangeHandler: filterChangeHandler,
-    getFilteredAds: getFilteredAds
+    getFilteredAdverts: getFilteredAdverts
   };
 })();
 

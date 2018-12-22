@@ -35,8 +35,8 @@
   var adFormTimeInSelect = adForm.querySelector('#timein');
   var adFormTimeOutSelect = adForm.querySelector('#timeout');
 
-  function fillValueAddressField(coords) {
-    formAddressField.value = coords.x + ', ' + coords.y;
+  function fillValueAddressField(coord) {
+    formAddressField.value = coord.x + ', ' + coord.y;
   }
 
   function roomSelectChangeHandler() {
