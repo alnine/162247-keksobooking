@@ -14,12 +14,12 @@
   var pinMain = pinsBlock.querySelector('.map__pin--main');
   var initialAdsData = [];
 
-  function renderPins(list) {
+  function renderPins(data) {
     var fragment = document.createDocumentFragment();
-    var maxPinsOnMap = Math.min(list.length, MAX_PIN_RENDER);
+    var maxPinsOnMap = Math.min(data.length, MAX_PIN_RENDER);
     for (var i = 0; i < maxPinsOnMap; i++) {
-      if (list[i].offer) {
-        var pin = window.getPin(list[i]);
+      if (data[i].offer) {
+        var pin = window.getPinLayout(data[i]);
         fragment.appendChild(pin);
       }
     }
@@ -29,13 +29,13 @@
   function activate(data) {
     element.classList.remove('map--faded');
     renderPins(data);
-    window.filter.formElement.addEventListener('change', window.filter.changeHandler);
+    window.filter.element.addEventListener('change', window.filter.changeHandler);
   }
 
   function clean() {
     window.card.close();
-    var pinButtons = pinsBlock.querySelectorAll('.map__pin[type=button]');
-    pinButtons.forEach(function (pin) {
+    var pinItems = pinsBlock.querySelectorAll('.map__pin[type=button]');
+    pinItems.forEach(function (pin) {
       pinsBlock.removeChild(pin);
     });
   }
@@ -48,7 +48,7 @@
   function deactivate() {
     element.classList.add('map--faded');
     clean();
-    window.filter.formElement.removeEventListener('change', window.filter.changeHandler);
+    window.filter.element.removeEventListener('change', window.filter.changeHandler);
   }
 
   function successDataLoadHandler(data) {

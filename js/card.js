@@ -9,6 +9,7 @@
     BUNGALO: 'Бунгало'
   };
 
+  var elementPlace = document.querySelector('.map__filters-container');
   var templateElement = document.querySelector('#card')
                         .content
                         .querySelector('.map__card');
@@ -38,13 +39,19 @@
   }
 
   function close() {
-    var offerCard = window.map.element.querySelector('.map__card.popup');
-    if (offerCard) {
-      var activePin = window.map.element.querySelector('.map__pin--active');
-      activePin.classList.remove('map__pin--active');
-      window.map.element.removeChild(offerCard);
+    var popupElement = window.map.element.querySelector('.map__card.popup');
+    if (popupElement) {
+      var activePinElement = window.map.element.querySelector('.map__pin--active');
+      activePinElement.classList.remove('map__pin--active');
+      window.map.element.removeChild(popupElement);
       document.removeEventListener('keydown', escHandler);
     }
+  }
+
+  function open(data) {
+    close();
+    window.map.element.insertBefore(window.card.getLayout(data), elementPlace);
+    document.addEventListener('keydown', escHandler);
   }
 
   function fillLayout(element, data) {
@@ -87,21 +94,21 @@
   }
 
   function getLayout(data) {
-    var layoutItem = templateElement.cloneNode(true);
-    var closeButton = layoutItem.querySelector('.popup__close');
+    var layout = templateElement.cloneNode(true);
+    var closeButton = layout.querySelector('.popup__close');
 
-    fillLayout(layoutItem, data);
-    deleteEmptyElementChilds(layoutItem);
+    fillLayout(layout, data);
+    deleteEmptyElementChilds(layout);
 
     closeButton.addEventListener('click', function () {
       close();
     });
 
-    return layoutItem;
+    return layout;
   }
 
   window.card = {
-    escHandler: escHandler,
+    open: open,
     close: close,
     getLayout: getLayout
   };

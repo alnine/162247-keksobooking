@@ -9,7 +9,7 @@
     HIGH: {min: 50000, max: Infinity}
   };
 
-  var formElement = document.querySelector('.map__filters');
+  var element = document.querySelector('.map__filters');
 
   function changeHandler() {
     window.util.debounce(function () {
@@ -18,7 +18,7 @@
   }
 
   function getFieldsData() {
-    var fields = Array.from(formElement.elements);
+    var fields = Array.from(element.elements);
     var data = {
       features: []
     };
@@ -86,7 +86,7 @@
   }
 
   window.filter = {
-    formElement: formElement,
+    element: element,
     changeHandler: changeHandler,
     getFilteredAdverts: getFilteredAdverts
   };
