@@ -23,6 +23,9 @@
     PALACE: 10000
   };
 
+  var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+  var AVATAR_DEFAULT = 'img/muffin-grey.svg';
+
   var element = document.querySelector('.ad-form');
   var submitButton = element.querySelector('.ad-form__submit');
   var resetButton = element.querySelector('.ad-form__reset');
@@ -34,6 +37,54 @@
   var typeSelect = element.querySelector('#type');
   var timeInSelect = element.querySelector('#timein');
   var timeOutSelect = element.querySelector('#timeout');
+  var avatarChooser = element.querySelector('#avatar');
+  var avatarPreviewElement = element.querySelector('.ad-form-header__preview img');
+  var photoContainer = element.querySelector('.ad-form__photo-container');
+  var photoChooser = element.querySelector('#images');
+  var photoPreviewElement = element.querySelector('.ad-form__photo');
+
+  function isImage(fileName) {
+    var result = FILE_TYPES.some(function (type) {
+      return fileName.endsWith(type);
+    });
+    return result;
+  }
+
+  function avatarInputChangeHandler() {
+    var file = avatarChooser.files[0];
+
+    if (isImage(file.name.toLowerCase())) {
+      window.util.setPreviewImg(file, avatarPreviewElement);
+    }
+  }
+
+  function getImgTemlate() {
+    var img = document.createElement('img');
+    img.width = '70';
+    img.height = '70';
+    return img;
+  }
+
+  function photoInputChangeHandler() {
+    var file = photoChooser.files[0];
+
+    if (isImage(file.name.toLowerCase())) {
+      var img = getImgTemlate();
+      window.util.setPreviewImg(file, img);
+      var previewItem = photoPreviewElement.cloneNode(true);
+      previewItem.appendChild(img);
+      photoContainer.insertBefore(previewItem, photoPreviewElement);
+    }
+  }
+
+  function cleanPhoto() {
+    var photoElements = element.querySelectorAll('.ad-form__photo');
+    photoElements.forEach(function (photo) {
+      if (photo.innerHTML !== '') {
+        photoContainer.removeChild(photo);
+      }
+    });
+  }
 
   function fillValueAddressField(coord) {
     addressField.value = coord.x + ', ' + coord.y;
@@ -74,6 +125,8 @@
     element.reset();
     window.map.deactivatePage();
     typeChangeHandler();
+    avatarPreviewElement.src = AVATAR_DEFAULT;
+    cleanPhoto();
   }
 
   function resetButtonClickHandler(evt) {
@@ -93,6 +146,8 @@
     capasitySelect.addEventListener('change', roomSelectChangeHandler);
     timeInSelect.addEventListener('change', timeInChangeHandler);
     timeOutSelect.addEventListener('change', timeOutChangeHandler);
+    avatarChooser.addEventListener('change', avatarInputChangeHandler);
+    photoChooser.addEventListener('change', photoInputChangeHandler);
   }
 
   function deactivate() {
@@ -107,6 +162,8 @@
     capasitySelect.removeEventListener('change', roomSelectChangeHandler);
     timeInSelect.removeEventListener('change', timeInChangeHandler);
     timeOutSelect.removeEventListener('change', timeOutChangeHandler);
+    avatarChooser.removeEventListener('change', avatarInputChangeHandler);
+    photoChooser.removeEventListener('change', photoInputChangeHandler);
   }
 
   window.form = {
