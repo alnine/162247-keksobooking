@@ -5,9 +5,9 @@
   var mapFilters = document.querySelector('.map__filters-container');
 
   function openOfferCard(data) {
-    window.card.closeOfferCard();
-    window.map.mapElement.insertBefore(window.card.getOfferCardLayout(data), mapFilters);
-    document.addEventListener('keydown', window.card.offerCardEscHandler);
+    window.card.close();
+    window.map.element.insertBefore(window.card.getLayout(data), mapFilters);
+    document.addEventListener('keydown', window.card.escHandler);
   }
 
   function getPinItemLayout(data) {

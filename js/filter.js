@@ -9,16 +9,16 @@
     HIGH: {min: 50000, max: Infinity}
   };
 
-  var filterForm = document.querySelector('.map__filters');
+  var formElement = document.querySelector('.map__filters');
 
-  function filterChangeHandler() {
+  function changeHandler() {
     window.util.debounce(function () {
-      window.map.updateMapPins();
+      window.map.updateRenderPins();
     });
   }
 
-  function getFilterData() {
-    var fields = Array.from(filterForm.elements);
+  function getFieldsData() {
+    var fields = Array.from(formElement.elements);
     var data = {
       features: []
     };
@@ -37,21 +37,6 @@
         });
       }
     });
-
-    /* for (var i = 0; i < elements.length; i++) {
-      if (elements[i].className === 'map__filter') {
-        data[elements[i].name] = elements[i].value;
-      }
-
-      if (elements[i].className === 'map__features') {
-        var features = elements[i].elements;
-        for (var k = 0; k < features.length; k++) {
-          if (features[k].checked) {
-            data.features.push(features[k].value);
-          }
-        }
-      }
-    } */
 
     return data;
   }
@@ -92,17 +77,17 @@
   }
 
   function getFilteredAdverts(adverts) {
-    var filterSelection = getFilterData();
+    var fieldsData = getFieldsData();
     var result = adverts.filter(function (advert) {
-      return isAdvertMatch(advert, filterSelection);
+      return isAdvertMatch(advert, fieldsData);
     });
 
     return result;
   }
 
   window.filter = {
-    filterForm: filterForm,
-    filterChangeHandler: filterChangeHandler,
+    formElement: formElement,
+    changeHandler: changeHandler,
     getFilteredAdverts: getFilteredAdverts
   };
 })();

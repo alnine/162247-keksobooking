@@ -23,98 +23,97 @@
     PALACE: 10000
   };
 
-  var adForm = document.querySelector('.ad-form');
-  var adFormSubmit = adForm.querySelector('.ad-form__submit');
-  var adFormReset = adForm.querySelector('.ad-form__reset');
-  var formFieldsets = adForm.querySelectorAll('fieldset');
-  var formAddressField = adForm.querySelector('#address');
-  var adFormRoomSelect = adForm.querySelector('#room_number');
-  var adFormCapasitySelect = adForm.querySelector('#capacity');
-  var adFormPriceField = adForm.querySelector('#price');
-  var adFormTypeSelect = adForm.querySelector('#type');
-  var adFormTimeInSelect = adForm.querySelector('#timein');
-  var adFormTimeOutSelect = adForm.querySelector('#timeout');
+  var element = document.querySelector('.ad-form');
+  var submitButton = element.querySelector('.ad-form__submit');
+  var resetButton = element.querySelector('.ad-form__reset');
+  var fieldsets = element.querySelectorAll('fieldset');
+  var addressField = element.querySelector('#address');
+  var roomSelect = element.querySelector('#room_number');
+  var capasitySelect = element.querySelector('#capacity');
+  var priceField = element.querySelector('#price');
+  var typeSelect = element.querySelector('#type');
+  var timeInSelect = element.querySelector('#timein');
+  var timeOutSelect = element.querySelector('#timeout');
 
   function fillValueAddressField(coord) {
-    formAddressField.value = coord.x + ', ' + coord.y;
+    addressField.value = coord.x + ', ' + coord.y;
   }
 
   function roomSelectChangeHandler() {
-    var guests = GuestPerRoom['ROOM_' + adFormRoomSelect.value];
-    var errorMessage = GuestErrorMessage['ROOM_' + adFormRoomSelect.value];
-    var isMatch = guests.includes(adFormCapasitySelect.value);
-    adFormCapasitySelect.setCustomValidity(isMatch ? '' : errorMessage);
+    var guests = GuestPerRoom['ROOM_' + roomSelect.value];
+    var errorMessage = GuestErrorMessage['ROOM_' + roomSelect.value];
+    var isMatch = guests.includes(capasitySelect.value);
+    capasitySelect.setCustomValidity(isMatch ? '' : errorMessage);
   }
 
   function typeChangeHandler() {
-    var key = adFormTypeSelect.value.toUpperCase();
-    adFormPriceField.min = MinPriceHousing[key];
-    adFormPriceField.placeholder = MinPriceHousing[key];
+    var key = typeSelect.value.toUpperCase();
+    priceField.min = MinPriceHousing[key];
+    priceField.placeholder = MinPriceHousing[key];
   }
 
   function timeInChangeHandler() {
-    var timeSelect = adFormTimeInSelect.value;
-    adFormTimeOutSelect.value = timeSelect;
+    timeOutSelect.value = timeInSelect.value;
   }
 
   function timeOutChangeHandler() {
-    var timeSelect = adFormTimeOutSelect.value;
-    adFormTimeInSelect.value = timeSelect;
+    timeInSelect.value = timeOutSelect.value;
   }
 
-  function submitClickHandler(evt) {
-    if (!adForm.checkValidity()) {
-      adForm.classList.add('ad-form--invalid');
+  function submitButtonClickHandler(evt) {
+    if (!element.checkValidity()) {
+      element.classList.add('ad-form--invalid');
     } else {
       evt.preventDefault();
-      adForm.classList.remove('ad-form--invalid');
-      window.backend.upload(new FormData(adForm), window.popup.successHandler, window.popup.errorHandler);
+      element.classList.remove('ad-form--invalid');
+      window.backend.upload(new FormData(element), window.popup.successHandler, window.popup.errorHandler);
     }
   }
 
-  function resetForm() {
-    adForm.reset();
+  function discard() {
+    element.reset();
     window.map.deactivatePage();
     typeChangeHandler();
   }
 
-  function resetClickHandler(evt) {
+  function resetButtonClickHandler(evt) {
     evt.preventDefault();
-    resetForm();
+    discard();
   }
 
-  function activateForm() {
-    adForm.classList.remove('ad-form--disabled');
-    formFieldsets.forEach(function (field) {
+  function activate() {
+    element.classList.remove('ad-form--disabled');
+    fieldsets.forEach(function (field) {
       field.disabled = false;
     });
-    adFormSubmit.addEventListener('click', submitClickHandler);
-    adFormReset.addEventListener('click', resetClickHandler);
-    adFormTypeSelect.addEventListener('change', typeChangeHandler);
-    adFormRoomSelect.addEventListener('change', roomSelectChangeHandler);
-    adFormCapasitySelect.addEventListener('change', roomSelectChangeHandler);
-    adFormTimeInSelect.addEventListener('change', timeInChangeHandler);
-    adFormTimeOutSelect.addEventListener('change', timeOutChangeHandler);
+    submitButton.addEventListener('click', submitButtonClickHandler);
+    resetButton.addEventListener('click', resetButtonClickHandler);
+    typeSelect.addEventListener('change', typeChangeHandler);
+    roomSelect.addEventListener('change', roomSelectChangeHandler);
+    capasitySelect.addEventListener('change', roomSelectChangeHandler);
+    timeInSelect.addEventListener('change', timeInChangeHandler);
+    timeOutSelect.addEventListener('change', timeOutChangeHandler);
   }
 
-  function deactivateForm() {
-    adForm.classList.add('ad-form--disabled');
-    formFieldsets.forEach(function (field) {
+  function deactivate() {
+    element.classList.add('ad-form--disabled');
+    fieldsets.forEach(function (field) {
       field.disabled = true;
     });
-    adFormSubmit.removeEventListener('click', submitClickHandler);
-    adFormReset.removeEventListener('click', resetClickHandler);
-    adFormTypeSelect.removeEventListener('change', typeChangeHandler);
-    adFormRoomSelect.removeEventListener('change', roomSelectChangeHandler);
-    adFormCapasitySelect.removeEventListener('change', roomSelectChangeHandler);
-    adFormTimeInSelect.removeEventListener('change', timeInChangeHandler);
-    adFormTimeOutSelect.removeEventListener('change', timeOutChangeHandler);
+    submitButton.removeEventListener('click', submitButtonClickHandler);
+    resetButton.removeEventListener('click', resetButtonClickHandler);
+    typeSelect.removeEventListener('change', typeChangeHandler);
+    roomSelect.removeEventListener('change', roomSelectChangeHandler);
+    capasitySelect.removeEventListener('change', roomSelectChangeHandler);
+    timeInSelect.removeEventListener('change', timeInChangeHandler);
+    timeOutSelect.removeEventListener('change', timeOutChangeHandler);
   }
 
   window.form = {
-    activateForm: activateForm,
-    deactivateForm: deactivateForm,
-    resetForm: resetForm,
+    fieldsets: fieldsets,
+    activate: activate,
+    deactivate: deactivate,
+    discard: discard,
     fillValueAddressField: fillValueAddressField
   };
 

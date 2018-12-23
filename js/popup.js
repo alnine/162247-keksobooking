@@ -36,7 +36,7 @@
     mainBlock.appendChild(popup);
     document.addEventListener('keydown', popUpEscHandler);
     popup.addEventListener('click', closePopUp);
-    window.form.resetForm();
+    window.form.discard();
   }
 
   function errorHandler(error) {

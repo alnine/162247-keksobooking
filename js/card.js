@@ -9,9 +9,7 @@
     BUNGALO: 'Бунгало'
   };
 
-  var map = document.querySelector('.map');
-
-  var offerCardTemplate = document.querySelector('#card')
+  var templateElement = document.querySelector('#card')
                         .content
                         .querySelector('.map__card');
 
@@ -35,99 +33,99 @@
     return fragment;
   }
 
-  function offerCardEscHandler(evt) {
-    window.util.isEscEvent(evt, closeOfferCard);
+  function escHandler(evt) {
+    window.util.isEscEvent(evt, close);
   }
 
-  function closeOfferCard() {
-    var offerCard = map.querySelector('.map__card.popup');
+  function close() {
+    var offerCard = window.map.element.querySelector('.map__card.popup');
     if (offerCard) {
-      var activePin = map.querySelector('.map__pin--active');
+      var activePin = window.map.element.querySelector('.map__pin--active');
       activePin.classList.remove('map__pin--active');
-      map.removeChild(offerCard);
-      document.removeEventListener('keydown', offerCardEscHandler);
+      window.map.element.removeChild(offerCard);
+      document.removeEventListener('keydown', escHandler);
     }
   }
 
-  function getOfferCardLayout(data) {
-    var offerCardItem = offerCardTemplate.cloneNode(true);
-    var featuresList = offerCardItem.querySelector('.popup__features');
-    var photosList = offerCardItem.querySelector('.popup__photos');
+  function getLayout(data) {
+    var layoutItem = templateElement.cloneNode(true);
+    var featuresList = layoutItem.querySelector('.popup__features');
+    var photosList = layoutItem.querySelector('.popup__photos');
     var photoTemplate = photosList.querySelector('img');
-    var cardClose = offerCardItem.querySelector('.popup__close');
+    var closeButton = layoutItem.querySelector('.popup__close');
 
-    cardClose.addEventListener('click', function () {
-      closeOfferCard();
+    closeButton.addEventListener('click', function () {
+      close();
     });
 
     if (data.offer.title) {
-      offerCardItem.querySelector('.popup__title').textContent = data.offer.title;
+      layoutItem.querySelector('.popup__title').textContent = data.offer.title;
     } else {
-      offerCardItem.removeChild(offerCardItem.querySelector('.popup__title'));
+      layoutItem.removeChild(layoutItem.querySelector('.popup__title'));
     }
 
     if (data.offer.address) {
-      offerCardItem.querySelector('.popup__text--address').textContent = data.offer.address;
+      layoutItem.querySelector('.popup__text--address').textContent = data.offer.address;
     } else {
-      offerCardItem.removeChild(offerCardItem.querySelector('.popup__text--address'));
+      layoutItem.removeChild(layoutItem.querySelector('.popup__text--address'));
     }
 
     if (data.offer.price) {
-      offerCardItem.querySelector('.popup__text--price').textContent = data.offer.price + '₽/ночь';
+      layoutItem.querySelector('.popup__text--price').textContent = data.offer.price + '₽/ночь';
     } else {
-      offerCardItem.removeChild(offerCardItem.querySelector('.popup__text--price'));
+      layoutItem.removeChild(layoutItem.querySelector('.popup__text--price'));
     }
 
     if (data.offer.type) {
-      offerCardItem.querySelector('.popup__type').textContent = TypesLabel[data.offer.type];
+      layoutItem.querySelector('.popup__type').textContent = TypesLabel[data.offer.type];
     } else {
-      offerCardItem.removeChild(offerCardItem.querySelector('.popup__type'));
+      layoutItem.removeChild(layoutItem.querySelector('.popup__type'));
     }
 
     if (data.offer.rooms && data.offer.guests) {
-      offerCardItem.querySelector('.popup__text--capacity').textContent = data.offer.rooms + ' комнаты для ' + data.offer.guests + ' гостей';
+      layoutItem.querySelector('.popup__text--capacity').textContent = data.offer.rooms + ' комнаты для ' + data.offer.guests + ' гостей';
     } else {
-      offerCardItem.removeChild(offerCardItem.querySelector('.popup__text--capacity'));
+      layoutItem.removeChild(layoutItem.querySelector('.popup__text--capacity'));
     }
 
     if (data.offer.checkin && data.offer.checkout) {
-      offerCardItem.querySelector('.popup__text--time').textContent = 'Заезд после ' + data.offer.checkin + ', выезд до ' + data.offer.checkout;
+      layoutItem.querySelector('.popup__text--time').textContent = 'Заезд после ' + data.offer.checkin + ', выезд до ' + data.offer.checkout;
     } else {
-      offerCardItem.removeChild(offerCardItem.querySelector('.popup__text--time'));
+      layoutItem.removeChild(layoutItem.querySelector('.popup__text--time'));
     }
 
     if (data.offer.features) {
       featuresList.innerHTML = '';
       featuresList.appendChild(getFeaturesLayout(data.offer.features));
     } else {
-      offerCardItem.removeChild(featuresList);
+      layoutItem.removeChild(featuresList);
     }
 
     if (data.offer.description) {
-      offerCardItem.querySelector('.popup__description').textContent = data.offer.description;
+      layoutItem.querySelector('.popup__description').textContent = data.offer.description;
     } else {
-      offerCardItem.removeChild(offerCardItem.querySelector('.popup__description'));
+      layoutItem.removeChild(layoutItem.querySelector('.popup__description'));
     }
 
     if (data.offer.photos) {
       photosList.innerHTML = '';
       photosList.appendChild(getPhotosLayout(data.offer.photos, photoTemplate));
     } else {
-      offerCardItem.removeChild(photosList);
+      layoutItem.removeChild(photosList);
     }
 
     if (data.author.avatar) {
-      offerCardItem.querySelector('.popup__avatar').src = data.author.avatar;
+      layoutItem.querySelector('.popup__avatar').src = data.author.avatar;
     } else {
-      offerCardItem.removeChild(offerCardItem.querySelector('.popup__avatar'));
+      layoutItem.removeChild(layoutItem.querySelector('.popup__avatar'));
     }
 
-    return offerCardItem;
+    return layoutItem;
   }
 
   window.card = {
-    offerCardEscHandler: offerCardEscHandler,
-    closeOfferCard: closeOfferCard,
-    getOfferCardLayout: getOfferCardLayout
+    escHandler: escHandler,
+    close: close,
+    getLayout: getLayout
   };
 })();
