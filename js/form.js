@@ -134,11 +134,15 @@
     discard();
   }
 
+  function disableFieldset(isDisable) {
+    fieldsets.forEach(function (field) {
+      field.disabled = isDisable;
+    });
+  }
+
   function activate() {
     element.classList.remove('ad-form--disabled');
-    fieldsets.forEach(function (field) {
-      field.disabled = false;
-    });
+    disableFieldset(false);
     submitButton.addEventListener('click', submitButtonClickHandler);
     resetButton.addEventListener('click', resetButtonClickHandler);
     typeSelect.addEventListener('change', typeChangeHandler);
@@ -152,9 +156,7 @@
 
   function deactivate() {
     element.classList.add('ad-form--disabled');
-    fieldsets.forEach(function (field) {
-      field.disabled = true;
-    });
+    disableFieldset(true);
     submitButton.removeEventListener('click', submitButtonClickHandler);
     resetButton.removeEventListener('click', resetButtonClickHandler);
     typeSelect.removeEventListener('change', typeChangeHandler);
@@ -167,7 +169,7 @@
   }
 
   window.form = {
-    fieldsets: fieldsets,
+    disableFieldset: disableFieldset,
     activate: activate,
     deactivate: deactivate,
     discard: discard,
