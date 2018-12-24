@@ -91,8 +91,6 @@
   var pinMainStartCoords = getPinCenterCoords(pinMain);
   window.form.fillValueAddressField(pinMainStartCoords);
 
-  window.form.disableFieldset(true);
-
   pinMain.addEventListener('mousedown', function (downEvt) {
     downEvt.preventDefault();
 

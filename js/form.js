@@ -168,6 +168,8 @@
     photoChooser.removeEventListener('change', photoInputChangeHandler);
   }
 
+  disableFieldset(true);
+
   window.form = {
     disableFieldset: disableFieldset,
     activate: activate,
