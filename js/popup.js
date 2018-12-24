@@ -12,45 +12,45 @@
                         .querySelector('.error');
   var isError = false;
 
-  function popUpEscHandler(evt) {
-    window.util.isEscEvent(evt, closePopUp);
+  function escHandler(evt) {
+    window.util.isEscEvent(evt, close);
   }
 
   function closeButtonClickHandler(evt) {
     evt.stopPropagation();
-    closePopUp();
+    close();
   }
 
-  function closePopUp() {
-    var popup = mainBlock.querySelector('.success') || mainBlock.querySelector('.error');
-    if (popup.className === 'error') {
+  function close() {
+    var element = mainBlock.querySelector('.success') || mainBlock.querySelector('.error');
+    if (element.className === 'error') {
       isError = false;
       window.map.deactivatePage();
     }
-    mainBlock.removeChild(popup);
-    document.removeEventListener('keydown', popUpEscHandler);
+    mainBlock.removeChild(element);
+    document.removeEventListener('keydown', escHandler);
   }
 
   function successHandler() {
-    var popup = successTemplate.cloneNode(true);
-    mainBlock.appendChild(popup);
-    document.addEventListener('keydown', popUpEscHandler);
-    popup.addEventListener('click', closePopUp);
-    window.form.resetForm();
+    var item = successTemplate.cloneNode(true);
+    mainBlock.appendChild(item);
+    document.addEventListener('keydown', escHandler);
+    item.addEventListener('click', close);
+    window.form.discard();
   }
 
   function errorHandler(error) {
     if (!isError) {
       isError = true;
-      var popup = errorTemplate.cloneNode(true);
-      var popupCloseButton = popup.querySelector('.error__button');
-      var popupMessage = popup.querySelector('.error__message');
-      popupMessage.textContent = popupMessage.textContent + '\r\n' + error;
-      popupMessage.style.whiteSpace = 'pre';
-      mainBlock.appendChild(popup);
-      document.addEventListener('keydown', popUpEscHandler);
-      popup.addEventListener('click', closePopUp);
-      popupCloseButton.addEventListener('click', closeButtonClickHandler);
+      var item = errorTemplate.cloneNode(true);
+      var closeButton = item.querySelector('.error__button');
+      var messageElement = item.querySelector('.error__message');
+      messageElement.textContent = messageElement.textContent + '\r\n' + error;
+      messageElement.style.whiteSpace = 'pre';
+      mainBlock.appendChild(item);
+      document.addEventListener('keydown', escHandler);
+      item.addEventListener('click', close);
+      closeButton.addEventListener('click', closeButtonClickHandler);
     }
   }
 

@@ -23,102 +23,158 @@
     PALACE: 10000
   };
 
-  var adForm = document.querySelector('.ad-form');
-  var adFormSubmit = adForm.querySelector('.ad-form__submit');
-  var adFormReset = adForm.querySelector('.ad-form__reset');
-  var formFieldsets = adForm.querySelectorAll('fieldset');
-  var formAddressField = adForm.querySelector('#address');
-  var adFormRoomSelect = adForm.querySelector('#room_number');
-  var adFormCapasitySelect = adForm.querySelector('#capacity');
-  var adFormPriceField = adForm.querySelector('#price');
-  var adFormTypeSelect = adForm.querySelector('#type');
-  var adFormTimeInSelect = adForm.querySelector('#timein');
-  var adFormTimeOutSelect = adForm.querySelector('#timeout');
+  var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+  var AVATAR_DEFAULT = 'img/muffin-grey.svg';
 
-  function fillValueAddressField(coords) {
-    formAddressField.value = coords.x + ', ' + coords.y;
+  var element = document.querySelector('.ad-form');
+  var submitButton = element.querySelector('.ad-form__submit');
+  var resetButton = element.querySelector('.ad-form__reset');
+  var fieldsets = element.querySelectorAll('fieldset');
+  var addressField = element.querySelector('#address');
+  var roomSelect = element.querySelector('#room_number');
+  var capasitySelect = element.querySelector('#capacity');
+  var priceField = element.querySelector('#price');
+  var typeSelect = element.querySelector('#type');
+  var timeInSelect = element.querySelector('#timein');
+  var timeOutSelect = element.querySelector('#timeout');
+  var avatarChooser = element.querySelector('#avatar');
+  var avatarPreviewElement = element.querySelector('.ad-form-header__preview img');
+  var photoContainer = element.querySelector('.ad-form__photo-container');
+  var photoChooser = element.querySelector('#images');
+  var photoPreviewElement = element.querySelector('.ad-form__photo');
+
+  function isImage(fileName) {
+    var result = FILE_TYPES.some(function (type) {
+      return fileName.endsWith(type);
+    });
+    return result;
+  }
+
+  function avatarInputChangeHandler() {
+    var file = avatarChooser.files[0];
+
+    if (isImage(file.name.toLowerCase())) {
+      window.util.setPreviewImg(file, avatarPreviewElement);
+    }
+  }
+
+  function getImgTemlate() {
+    var img = document.createElement('img');
+    img.width = '70';
+    img.height = '70';
+    return img;
+  }
+
+  function photoInputChangeHandler() {
+    var file = photoChooser.files[0];
+
+    if (isImage(file.name.toLowerCase())) {
+      var img = getImgTemlate();
+      window.util.setPreviewImg(file, img);
+      var previewItem = photoPreviewElement.cloneNode(true);
+      previewItem.appendChild(img);
+      photoContainer.insertBefore(previewItem, photoPreviewElement);
+    }
+  }
+
+  function cleanPhoto() {
+    var photoElements = element.querySelectorAll('.ad-form__photo');
+    photoElements.forEach(function (photo) {
+      if (photo.innerHTML !== '') {
+        photoContainer.removeChild(photo);
+      }
+    });
+  }
+
+  function fillValueAddressField(coord) {
+    addressField.value = coord.x + ', ' + coord.y;
   }
 
   function roomSelectChangeHandler() {
-    var guests = GuestPerRoom['ROOM_' + adFormRoomSelect.value];
-    var errorMessage = GuestErrorMessage['ROOM_' + adFormRoomSelect.value];
-    var isMatch = guests.includes(adFormCapasitySelect.value);
-    if (isMatch) {
-      adFormCapasitySelect.setCustomValidity('');
-    } else {
-      adFormCapasitySelect.setCustomValidity(errorMessage);
-    }
+    var guests = GuestPerRoom['ROOM_' + roomSelect.value];
+    var errorMessage = GuestErrorMessage['ROOM_' + roomSelect.value];
+    var isMatch = guests.includes(capasitySelect.value);
+    capasitySelect.setCustomValidity(isMatch ? '' : errorMessage);
   }
 
-  function setMinPrice() {
-    var key = adFormTypeSelect.value.toUpperCase();
-    adFormPriceField.min = MinPriceHousing[key];
-    adFormPriceField.placeholder = MinPriceHousing[key];
+  function typeChangeHandler() {
+    var key = typeSelect.value.toUpperCase();
+    priceField.min = MinPriceHousing[key];
+    priceField.placeholder = MinPriceHousing[key];
   }
 
   function timeInChangeHandler() {
-    var timeSelect = adFormTimeInSelect.value;
-    adFormTimeOutSelect.value = timeSelect;
+    timeOutSelect.value = timeInSelect.value;
   }
 
   function timeOutChangeHandler() {
-    var timeSelect = adFormTimeOutSelect.value;
-    adFormTimeInSelect.value = timeSelect;
+    timeInSelect.value = timeOutSelect.value;
   }
 
-  function submitClickHandler(evt) {
-    if (!adForm.checkValidity()) {
-      adForm.classList.add('ad-form--invalid');
+  function submitButtonClickHandler(evt) {
+    if (!element.checkValidity()) {
+      element.classList.add('ad-form--invalid');
     } else {
       evt.preventDefault();
-      adForm.classList.remove('ad-form--invalid');
-      window.backend.upload(new FormData(adForm), window.popup.successHandler, window.popup.errorHandler);
+      element.classList.remove('ad-form--invalid');
+      window.backend.upload(new FormData(element), window.popup.successHandler, window.popup.errorHandler);
     }
   }
 
-  function resetForm() {
-    adForm.reset();
+  function discard() {
+    element.reset();
     window.map.deactivatePage();
-    setMinPrice();
+    typeChangeHandler();
+    avatarPreviewElement.src = AVATAR_DEFAULT;
+    cleanPhoto();
   }
 
-  function resetClickHandler(evt) {
+  function resetButtonClickHandler(evt) {
     evt.preventDefault();
-    resetForm();
+    discard();
   }
 
-  function activateForm() {
-    adForm.classList.remove('ad-form--disabled');
-    formFieldsets.forEach(function (field) {
-      field.disabled = false;
+  function disableFieldset(isDisable) {
+    fieldsets.forEach(function (field) {
+      field.disabled = isDisable;
     });
-    adFormSubmit.addEventListener('click', submitClickHandler);
-    adFormReset.addEventListener('click', resetClickHandler);
-    adFormTypeSelect.addEventListener('change', setMinPrice);
-    adFormRoomSelect.addEventListener('change', roomSelectChangeHandler);
-    adFormCapasitySelect.addEventListener('change', roomSelectChangeHandler);
-    adFormTimeInSelect.addEventListener('change', timeInChangeHandler);
-    adFormTimeOutSelect.addEventListener('change', timeOutChangeHandler);
   }
 
-  function deactivateForm() {
-    adForm.classList.add('ad-form--disabled');
-    formFieldsets.forEach(function (field) {
-      field.disabled = true;
-    });
-    adFormSubmit.removeEventListener('click', submitClickHandler);
-    adFormReset.removeEventListener('click', resetClickHandler);
-    adFormTypeSelect.removeEventListener('change', setMinPrice);
-    adFormRoomSelect.removeEventListener('change', roomSelectChangeHandler);
-    adFormCapasitySelect.removeEventListener('change', roomSelectChangeHandler);
-    adFormTimeInSelect.removeEventListener('change', timeInChangeHandler);
-    adFormTimeOutSelect.removeEventListener('change', timeOutChangeHandler);
+  function activate() {
+    element.classList.remove('ad-form--disabled');
+    disableFieldset(false);
+    submitButton.addEventListener('click', submitButtonClickHandler);
+    resetButton.addEventListener('click', resetButtonClickHandler);
+    typeSelect.addEventListener('change', typeChangeHandler);
+    roomSelect.addEventListener('change', roomSelectChangeHandler);
+    capasitySelect.addEventListener('change', roomSelectChangeHandler);
+    timeInSelect.addEventListener('change', timeInChangeHandler);
+    timeOutSelect.addEventListener('change', timeOutChangeHandler);
+    avatarChooser.addEventListener('change', avatarInputChangeHandler);
+    photoChooser.addEventListener('change', photoInputChangeHandler);
   }
+
+  function deactivate() {
+    element.classList.add('ad-form--disabled');
+    disableFieldset(true);
+    submitButton.removeEventListener('click', submitButtonClickHandler);
+    resetButton.removeEventListener('click', resetButtonClickHandler);
+    typeSelect.removeEventListener('change', typeChangeHandler);
+    roomSelect.removeEventListener('change', roomSelectChangeHandler);
+    capasitySelect.removeEventListener('change', roomSelectChangeHandler);
+    timeInSelect.removeEventListener('change', timeInChangeHandler);
+    timeOutSelect.removeEventListener('change', timeOutChangeHandler);
+    avatarChooser.removeEventListener('change', avatarInputChangeHandler);
+    photoChooser.removeEventListener('change', photoInputChangeHandler);
+  }
+
+  disableFieldset(true);
 
   window.form = {
-    activateForm: activateForm,
-    deactivateForm: deactivateForm,
-    resetForm: resetForm,
+    disableFieldset: disableFieldset,
+    activate: activate,
+    deactivate: deactivate,
+    discard: discard,
     fillValueAddressField: fillValueAddressField
   };
 
