@@ -34,8 +34,8 @@
 
   function clean() {
     window.card.close();
-    var pinItems = pinsBlock.querySelectorAll('.map__pin[type=button]');
-    pinItems.forEach(function (pin) {
+    var pinElements = pinsBlock.querySelectorAll('.map__pin[type=button]');
+    pinElements.forEach(function (pin) {
       pinsBlock.removeChild(pin);
     });
   }

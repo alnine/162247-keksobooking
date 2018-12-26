@@ -7,16 +7,16 @@
                          .querySelector('.map__pin');
 
   function getPinLayout(data) {
-    var item = template.cloneNode(true);
-    item.style.top = data.location.y + 'px';
-    item.style.left = data.location.x + 'px';
-    item.querySelector('img').src = data.author.avatar;
-    item.querySelector('img').alt = data.offer.title;
-    item.addEventListener('click', function () {
+    var element = template.cloneNode(true);
+    element.style.top = data.location.y + 'px';
+    element.style.left = data.location.x + 'px';
+    element.querySelector('img').src = data.author.avatar;
+    element.querySelector('img').alt = data.offer.title;
+    element.addEventListener('click', function () {
       window.card.open(data);
-      item.classList.add('map__pin--active');
+      element.classList.add('map__pin--active');
     });
-    return item;
+    return element;
   }
 
   window.getPinLayout = getPinLayout;

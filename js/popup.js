@@ -12,8 +12,12 @@
                         .querySelector('.error');
   var isError = false;
 
-  function escHandler(evt) {
+  function documentEscKeyDownHandler(evt) {
     window.util.isEscEvent(evt, close);
+  }
+
+  function popupClickHandler() {
+    close();
   }
 
   function closeButtonClickHandler(evt) {
@@ -28,28 +32,28 @@
       window.map.deactivatePage();
     }
     mainBlock.removeChild(element);
-    document.removeEventListener('keydown', escHandler);
+    document.removeEventListener('keydown', documentEscKeyDownHandler);
   }
 
   function successHandler() {
-    var item = successTemplate.cloneNode(true);
-    mainBlock.appendChild(item);
-    document.addEventListener('keydown', escHandler);
-    item.addEventListener('click', close);
+    var noticeElement = successTemplate.cloneNode(true);
+    mainBlock.appendChild(noticeElement);
+    document.addEventListener('keydown', documentEscKeyDownHandler);
+    noticeElement.addEventListener('click', popupClickHandler);
     window.form.discard();
   }
 
   function errorHandler(error) {
     if (!isError) {
       isError = true;
-      var item = errorTemplate.cloneNode(true);
-      var closeButton = item.querySelector('.error__button');
-      var messageElement = item.querySelector('.error__message');
+      var noticeElement = errorTemplate.cloneNode(true);
+      var closeButton = noticeElement.querySelector('.error__button');
+      var messageElement = noticeElement.querySelector('.error__message');
       messageElement.textContent = messageElement.textContent + '\r\n' + error;
       messageElement.style.whiteSpace = 'pre';
-      mainBlock.appendChild(item);
-      document.addEventListener('keydown', escHandler);
-      item.addEventListener('click', close);
+      mainBlock.appendChild(noticeElement);
+      document.addEventListener('keydown', documentEscKeyDownHandler);
+      noticeElement.addEventListener('click', popupClickHandler);
       closeButton.addEventListener('click', closeButtonClickHandler);
     }
   }
