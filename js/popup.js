@@ -12,11 +12,11 @@
                         .querySelector('.error');
   var isError = false;
 
-  function messageEscHandler(evt) {
+  function documentEscKeyDownHandler(evt) {
     window.util.isEscEvent(evt, close);
   }
 
-  function messageClickHandler() {
+  function popupClickHandler() {
     close();
   }
 
@@ -32,14 +32,14 @@
       window.map.deactivatePage();
     }
     mainBlock.removeChild(element);
-    document.removeEventListener('keydown', messageEscHandler);
+    document.removeEventListener('keydown', documentEscKeyDownHandler);
   }
 
   function successHandler() {
     var notice = successTemplate.cloneNode(true);
     mainBlock.appendChild(notice);
-    document.addEventListener('keydown', messageEscHandler);
-    notice.addEventListener('click', messageClickHandler);
+    document.addEventListener('keydown', documentEscKeyDownHandler);
+    notice.addEventListener('click', popupClickHandler);
     window.form.discard();
   }
 
@@ -52,8 +52,8 @@
       messageElement.textContent = messageElement.textContent + '\r\n' + error;
       messageElement.style.whiteSpace = 'pre';
       mainBlock.appendChild(notice);
-      document.addEventListener('keydown', messageEscHandler);
-      notice.addEventListener('click', messageClickHandler);
+      document.addEventListener('keydown', documentEscKeyDownHandler);
+      notice.addEventListener('click', popupClickHandler);
       closeButton.addEventListener('click', closeButtonClickHandler);
     }
   }

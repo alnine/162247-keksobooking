@@ -34,7 +34,7 @@
     return fragment;
   }
 
-  function cardPopupEscHandler(evt) {
+  function documentEscKeyDownHandler(evt) {
     window.util.isEscEvent(evt, close);
   }
 
@@ -44,14 +44,14 @@
       var activePinElement = window.map.element.querySelector('.map__pin--active');
       activePinElement.classList.remove('map__pin--active');
       window.map.element.removeChild(popupElement);
-      document.removeEventListener('keydown', cardPopupEscHandler);
+      document.removeEventListener('keydown', documentEscKeyDownHandler);
     }
   }
 
   function open(data) {
     close();
     window.map.element.insertBefore(getLayout(data), elementPlace);
-    document.addEventListener('keydown', cardPopupEscHandler);
+    document.addEventListener('keydown', documentEscKeyDownHandler);
   }
 
   function setCapacityContent(parent, rooms, guests) {
@@ -78,7 +78,7 @@
     }
   }
 
-  var placeContent = {
+  var placing = {
     setTitle: function (parent, content) {
       var element = parent.querySelector('.popup__title');
       element.textContent = content;
@@ -116,7 +116,7 @@
     setCheckout: setTimeContent
   };
 
-  var removeElement = {
+  var cleaning = {
     removeTitle: function (parent) {
       parent.querySelector('.popup__title').remove();
     },
@@ -160,21 +160,21 @@
       var value = data.offer[key];
 
       if (Array.isArray(value) && value.length > 0) {
-        placeContent['set' + capitalizeFirstLetter(key)](layout, data.offer[key]);
+        placing['set' + capitalizeFirstLetter(key)](layout, data.offer[key]);
       } else if ((key === 'checkin' || key === 'checkout') && data.offer['checkin'] && data.offer['checkout']) {
         if (!isTimeChange) {
-          placeContent['set' + capitalizeFirstLetter(key)](layout, data.offer['checkin'], data.offer['checkout']);
+          placing['set' + capitalizeFirstLetter(key)](layout, data.offer['checkin'], data.offer['checkout']);
           isTimeChange = true;
         }
       } else if ((key === 'rooms' || key === 'guests') && data.offer['rooms'] && data.offer['guests']) {
         if (!isCapacityChange) {
-          placeContent['set' + capitalizeFirstLetter(key)](layout, data.offer['rooms'], data.offer['guests']);
+          placing['set' + capitalizeFirstLetter(key)](layout, data.offer['rooms'], data.offer['guests']);
           isCapacityChange = true;
         }
       } else if (value) {
-        placeContent['set' + capitalizeFirstLetter(key)](layout, data.offer[key]);
+        placing['set' + capitalizeFirstLetter(key)](layout, data.offer[key]);
       } else {
-        removeElement['remove' + capitalizeFirstLetter(key)](layout);
+        cleaning['remove' + capitalizeFirstLetter(key)](layout);
       }
     });
 
