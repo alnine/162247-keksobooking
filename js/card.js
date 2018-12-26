@@ -17,9 +17,9 @@
   function getFeaturesLayout(features) {
     var fragment = document.createDocumentFragment();
     for (var i = 0; i < features.length; i++) {
-      var featuresItem = document.createElement('li');
-      featuresItem.className = 'popup__feature popup__feature--' + features[i];
-      fragment.appendChild(featuresItem);
+      var featuresElement = document.createElement('li');
+      featuresElement.className = 'popup__feature popup__feature--' + features[i];
+      fragment.appendChild(featuresElement);
     }
     return fragment;
   }
@@ -27,9 +27,9 @@
   function getPhotosLayout(photos, template) {
     var fragment = document.createDocumentFragment();
     for (var i = 0; i < photos.length; i++) {
-      var photosItem = template.cloneNode();
-      photosItem.src = photos[i];
-      fragment.appendChild(photosItem);
+      var photosElement = template.cloneNode();
+      photosElement.src = photos[i];
+      fragment.appendChild(photosElement);
     }
     return fragment;
   }

@@ -71,9 +71,9 @@
     if (isImage(file.name.toLowerCase())) {
       var img = getImgTemlate();
       window.util.setPreviewImg(file, img);
-      var previewItem = photoPreviewElement.cloneNode(true);
-      previewItem.appendChild(img);
-      photoContainer.insertBefore(previewItem, photoPreviewElement);
+      var preview = photoPreviewElement.cloneNode(true);
+      preview.appendChild(img);
+      photoContainer.insertBefore(preview, photoPreviewElement);
     }
   }
 

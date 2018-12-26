@@ -36,24 +36,24 @@
   }
 
   function successHandler() {
-    var item = successTemplate.cloneNode(true);
-    mainBlock.appendChild(item);
+    var notice = successTemplate.cloneNode(true);
+    mainBlock.appendChild(notice);
     document.addEventListener('keydown', messageEscHandler);
-    item.addEventListener('click', messageClickHandler);
+    notice.addEventListener('click', messageClickHandler);
     window.form.discard();
   }
 
   function errorHandler(error) {
     if (!isError) {
       isError = true;
-      var item = errorTemplate.cloneNode(true);
-      var closeButton = item.querySelector('.error__button');
-      var messageElement = item.querySelector('.error__message');
+      var notice = errorTemplate.cloneNode(true);
+      var closeButton = notice.querySelector('.error__button');
+      var messageElement = notice.querySelector('.error__message');
       messageElement.textContent = messageElement.textContent + '\r\n' + error;
       messageElement.style.whiteSpace = 'pre';
-      mainBlock.appendChild(item);
+      mainBlock.appendChild(notice);
       document.addEventListener('keydown', messageEscHandler);
-      item.addEventListener('click', messageClickHandler);
+      notice.addEventListener('click', messageClickHandler);
       closeButton.addEventListener('click', closeButtonClickHandler);
     }
   }
