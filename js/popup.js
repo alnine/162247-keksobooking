@@ -36,24 +36,24 @@
   }
 
   function successHandler() {
-    var notice = successTemplate.cloneNode(true);
-    mainBlock.appendChild(notice);
+    var noticeElement = successTemplate.cloneNode(true);
+    mainBlock.appendChild(noticeElement);
     document.addEventListener('keydown', documentEscKeyDownHandler);
-    notice.addEventListener('click', popupClickHandler);
+    noticeElement.addEventListener('click', popupClickHandler);
     window.form.discard();
   }
 
   function errorHandler(error) {
     if (!isError) {
       isError = true;
-      var notice = errorTemplate.cloneNode(true);
-      var closeButton = notice.querySelector('.error__button');
-      var messageElement = notice.querySelector('.error__message');
+      var noticeElement = errorTemplate.cloneNode(true);
+      var closeButton = noticeElement.querySelector('.error__button');
+      var messageElement = noticeElement.querySelector('.error__message');
       messageElement.textContent = messageElement.textContent + '\r\n' + error;
       messageElement.style.whiteSpace = 'pre';
-      mainBlock.appendChild(notice);
+      mainBlock.appendChild(noticeElement);
       document.addEventListener('keydown', documentEscKeyDownHandler);
-      notice.addEventListener('click', popupClickHandler);
+      noticeElement.addEventListener('click', popupClickHandler);
       closeButton.addEventListener('click', closeButtonClickHandler);
     }
   }
