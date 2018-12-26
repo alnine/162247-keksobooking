@@ -54,24 +54,24 @@
     document.addEventListener('keydown', escHandler);
   }
 
-  function placeCapacityContent(parent, rooms, guests) {
+  function setCapacityContent(parent, rooms, guests) {
     var element = parent.querySelector('.popup__text--capacity');
     element.textContent = rooms + ' комнаты для ' + guests + ' гостей';
   }
 
-  function placeTimeContent(parent, entry, exit) {
+  function setTimeContent(parent, entry, exit) {
     var element = parent.querySelector('.popup__text--time');
     element.textContent = 'Заезд после ' + entry + ', выезд до ' + exit;
   }
 
-  function removeCapacitiItem(parent) {
+  function removeCapacityElement(parent) {
     var element = parent.querySelector('.popup__text--capacity');
     if (element) {
       element.remove();
     }
   }
 
-  function removeTimeItem(parent) {
+  function removeTimeElement(parent) {
     var element = parent.querySelector('.popup__text--time');
     if (element) {
       element.remove();
@@ -79,70 +79,74 @@
   }
 
   var placeContent = {
-    title: function (parent, content) {
+    setTitle: function (parent, content) {
       var element = parent.querySelector('.popup__title');
       element.textContent = content;
     },
-    address: function (parent, content) {
+    setAddress: function (parent, content) {
       var element = parent.querySelector('.popup__text--address');
       element.textContent = content;
     },
-    price: function (parent, content) {
+    setPrice: function (parent, content) {
       var element = parent.querySelector('.popup__text--price');
       element.textContent = content + '₽/ночь';
     },
-    type: function (parent, content) {
+    setType: function (parent, content) {
       var element = parent.querySelector('.popup__type');
       element.textContent = TypesLabel[content.toUpperCase()];
     },
-    description: function (parent, content) {
+    setDescription: function (parent, content) {
       var element = parent.querySelector('.popup__description');
       element.textContent = content;
     },
-    features: function (parent, content) {
+    setFeatures: function (parent, content) {
       var element = parent.querySelector('.popup__features');
       element.innerHTML = '';
       element.appendChild(getFeaturesLayout(content));
     },
-    photos: function (parent, content) {
+    setPhotos: function (parent, content) {
       var element = parent.querySelector('.popup__photos');
       var template = element.querySelector('img');
       element.innerHTML = '';
       element.appendChild(getPhotosLayout(content, template));
     },
-    rooms: placeCapacityContent,
-    guests: placeCapacityContent,
-    checkin: placeTimeContent,
-    checkout: placeTimeContent
+    setRooms: setCapacityContent,
+    setGuests: setCapacityContent,
+    setCheckin: setTimeContent,
+    setCheckout: setTimeContent
   };
 
-  var removeItem = {
-    title: function (parent) {
+  var removeElement = {
+    removeTitle: function (parent) {
       parent.querySelector('.popup__title').remove();
     },
-    address: function (parent) {
+    removeAddress: function (parent) {
       parent.querySelector('.popup__text--address').remove();
     },
-    price: function (parent) {
+    removePrice: function (parent) {
       parent.querySelector('.popup__text--price').remove();
     },
-    type: function (parent) {
+    removeType: function (parent) {
       parent.querySelector('.popup__type').remove();
     },
-    description: function (parent) {
+    removeDescription: function (parent) {
       parent.querySelector('.popup__description').remove();
     },
-    features: function (parent) {
+    removeFeatures: function (parent) {
       parent.querySelector('.popup__features').remove();
     },
-    photos: function (parent) {
+    removePhotos: function (parent) {
       parent.querySelector('.popup__photos').remove();
     },
-    rooms: removeCapacitiItem,
-    guests: removeCapacitiItem,
-    checkin: removeTimeItem,
-    checkout: removeTimeItem
+    removeRooms: removeCapacityElement,
+    removeGuests: removeCapacityElement,
+    removeCheckin: removeTimeElement,
+    removeCheckout: removeTimeElement
   };
+
+  function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
 
   function getLayout(data) {
     var layout = templateElement.cloneNode(true);
@@ -156,21 +160,21 @@
       var value = data.offer[key];
 
       if (Array.isArray(value) && value.length > 0) {
-        placeContent[key](layout, data.offer[key]);
+        placeContent['set' + capitalizeFirstLetter(key)](layout, data.offer[key]);
       } else if ((key === 'checkin' || key === 'checkout') && data.offer['checkin'] && data.offer['checkout']) {
         if (!isTimeChange) {
-          placeContent[key](layout, data.offer['checkin'], data.offer['checkout']);
+          placeContent['set' + capitalizeFirstLetter(key)](layout, data.offer['checkin'], data.offer['checkout']);
           isTimeChange = true;
         }
       } else if ((key === 'rooms' || key === 'guests') && data.offer['rooms'] && data.offer['guests']) {
         if (!isCapacityChange) {
-          placeContent[key](layout, data.offer['rooms'], data.offer['guests']);
+          placeContent['set' + capitalizeFirstLetter(key)](layout, data.offer['rooms'], data.offer['guests']);
           isCapacityChange = true;
         }
       } else if (value) {
-        placeContent[key](layout, data.offer[key]);
+        placeContent['set' + capitalizeFirstLetter(key)](layout, data.offer[key]);
       } else {
-        removeItem[key](layout);
+        removeElement['remove' + capitalizeFirstLetter(key)](layout);
       }
     });
 
