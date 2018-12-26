@@ -34,7 +34,7 @@
     return fragment;
   }
 
-  function escHandler(evt) {
+  function cardPopupEscHandler(evt) {
     window.util.isEscEvent(evt, close);
   }
 
@@ -44,14 +44,14 @@
       var activePinElement = window.map.element.querySelector('.map__pin--active');
       activePinElement.classList.remove('map__pin--active');
       window.map.element.removeChild(popupElement);
-      document.removeEventListener('keydown', escHandler);
+      document.removeEventListener('keydown', cardPopupEscHandler);
     }
   }
 
   function open(data) {
     close();
-    window.map.element.insertBefore(window.card.getLayout(data), elementPlace);
-    document.addEventListener('keydown', escHandler);
+    window.map.element.insertBefore(getLayout(data), elementPlace);
+    document.addEventListener('keydown', cardPopupEscHandler);
   }
 
   function setCapacityContent(parent, rooms, guests) {

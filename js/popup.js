@@ -12,8 +12,12 @@
                         .querySelector('.error');
   var isError = false;
 
-  function escHandler(evt) {
+  function messageEscHandler(evt) {
     window.util.isEscEvent(evt, close);
+  }
+
+  function messageClickHandler() {
+    close();
   }
 
   function closeButtonClickHandler(evt) {
@@ -28,14 +32,14 @@
       window.map.deactivatePage();
     }
     mainBlock.removeChild(element);
-    document.removeEventListener('keydown', escHandler);
+    document.removeEventListener('keydown', messageEscHandler);
   }
 
   function successHandler() {
     var item = successTemplate.cloneNode(true);
     mainBlock.appendChild(item);
-    document.addEventListener('keydown', escHandler);
-    item.addEventListener('click', close);
+    document.addEventListener('keydown', messageEscHandler);
+    item.addEventListener('click', messageClickHandler);
     window.form.discard();
   }
 
@@ -48,8 +52,8 @@
       messageElement.textContent = messageElement.textContent + '\r\n' + error;
       messageElement.style.whiteSpace = 'pre';
       mainBlock.appendChild(item);
-      document.addEventListener('keydown', escHandler);
-      item.addEventListener('click', close);
+      document.addEventListener('keydown', messageEscHandler);
+      item.addEventListener('click', messageClickHandler);
       closeButton.addEventListener('click', closeButtonClickHandler);
     }
   }
